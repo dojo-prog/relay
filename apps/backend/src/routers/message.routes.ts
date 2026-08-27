@@ -1,16 +1,13 @@
 import express from "express";
 import { protectRoute } from "../middlewares/auth.middleware";
 import validate from "../middlewares/validation.middleware";
-import { ConversationParamsSchema } from "../schemas/conversations";
+import { ConversationParamsSchema } from "@relay/shared";
 import {
   deleteMessage,
   getConversationMessages,
   updateMessage,
 } from "../controllers/message.controller";
-import {
-  DeleteMessageBodySchema,
-  MessageIdParamsSchema,
-} from "../schemas/messages";
+import { DeleteMessageBodySchema, MessageIdParamsSchema } from "@relay/shared";
 import { messageLimiter } from "../middlewares/rate.limit.middleware";
 
 const router = express.Router();

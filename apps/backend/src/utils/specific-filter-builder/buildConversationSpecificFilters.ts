@@ -1,4 +1,4 @@
-import { ConversationSpecificQuery } from "../../schemas/conversations";
+import { ConversationSpecificQuery } from "@relay/shared";
 
 const buildConversationSpecificFilters = (
   specific: ConversationSpecificQuery,

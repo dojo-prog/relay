@@ -1,6 +1,6 @@
 import { Controller } from "../types/handlers";
 import * as conversationMemberService from "../services/conversation_member.service";
-import { ConversationMemberQuerySchema } from "../schemas/conversation_members";
+import { ConversationMemberQuerySchema } from "@relay/shared";
 
 export const getConversationMembers: Controller = async (req, res, next) => {
   try {

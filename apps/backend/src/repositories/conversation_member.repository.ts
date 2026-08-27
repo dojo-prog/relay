@@ -7,8 +7,8 @@ import {
 import {
   ConversationMember,
   ConversationMemberWithRelations,
-} from "../schemas/conversation_members/conversation_member.schema";
-import { ConversationMemberQuery } from "../schemas/conversation_members";
+} from "@relay/shared";
+import { ConversationMemberQuery } from "@relay/shared";
 import { AddConversationMemberData } from "../types/conversation_member.types";
 import buildFilterQueries from "../utils/query-builder/buildFilterQueries";
 import buildInsertQueries from "../utils/query-builder/buildInsertQueries";

@@ -1,4 +1,4 @@
-import { Notification, NotificationType } from "../schemas/notifications";
+import { Notification, NotificationType } from "@relay/shared";
 import { PaginationResult } from "./common";
 
 // =======================================

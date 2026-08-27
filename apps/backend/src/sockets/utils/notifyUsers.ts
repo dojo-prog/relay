@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { NotificationType } from "../../schemas/notifications";
+import { NotificationType } from "@relay/shared";
 
 import * as notificationService from "../../services/notification.service";
 import * as conversationMemberService from "../../services/conversation_member.service";

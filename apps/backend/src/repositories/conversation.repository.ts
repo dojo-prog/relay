@@ -8,14 +8,14 @@ import {
   Conversation,
   ConversationQuery,
   ConversationWithRelations,
-} from "../schemas/conversations";
+} from "@relay/shared";
 import buildFilterQueries from "../utils/query-builder/buildFilterQueries";
 import buildInsertQueries from "../utils/query-builder/buildInsertQueries";
 import buildConversationSpecificFilters from "../utils/specific-filter-builder/buildConversationSpecificFilters";
 import { CreateConversationData } from "../types/conversation.types";
 import buildUpdateQueries from "../utils/query-builder/buildUpdateQueries";
-import { ConversationMember } from "../schemas/conversation_members";
-import { Message } from "../schemas/messages";
+import { ConversationMember } from "@relay/shared";
+import { Message } from "@relay/shared";
 
 export const find = async (
   userId: string,

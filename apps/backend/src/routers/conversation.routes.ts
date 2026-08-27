@@ -6,7 +6,7 @@ import {
   ConversationQuerySchema,
   CreateConversationBodySchema,
   UpdateConversationBodySchema,
-} from "../schemas/conversations";
+} from "@relay/shared";
 import {
   createConversation,
   deleteConversation,

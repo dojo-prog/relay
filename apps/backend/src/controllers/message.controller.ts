@@ -1,6 +1,6 @@
 import { Controller } from "../types/handlers";
 import * as messageService from "../services/message.service";
-import { MessageQuerySchema, UpdateMessageBody } from "../schemas/messages";
+import { MessageQuerySchema, UpdateMessageBody } from "@relay/shared";
 
 export const getConversationMessages: Controller = async (req, res, next) => {
   try {

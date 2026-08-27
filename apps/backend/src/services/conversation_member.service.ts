@@ -1,4 +1,4 @@
-import { ConversationMemberQuery } from "../schemas/conversation_members/conversation_member.request.schema";
+import { ConversationMemberQuery } from "@relay/shared";
 import AppError from "../utils/AppError";
 import {
   AddConversationMemberData,
@@ -11,7 +11,7 @@ import calculateTotalPages from "../utils/calculateTotalPages";
 
 import * as conversationMemberRepository from "../repositories/conversation_member.repository";
 import * as conversationRepository from "../repositories/conversation.repository";
-import { ConversationMemberWithRelations } from "../schemas/conversation_members";
+import { ConversationMemberWithRelations } from "@relay/shared";
 
 export const getConversationMembers = async (
   conversationId: string,

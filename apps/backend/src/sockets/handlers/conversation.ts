@@ -4,7 +4,7 @@ import {
   DeleteConversationInputSchema,
   MarkConversationAsReadInputSchema,
   UpdateConversationInputSchema,
-} from "../../schemas/conversations";
+} from "@relay/shared";
 import validate from "../utils/validate";
 import handleError from "../utils/handleError";
 
@@ -13,7 +13,7 @@ import * as conversationMemberService from "../../services/conversation_member.s
 import {
   AddConversationMemberInputSchema,
   RemoveConversationMemberInputSchema,
-} from "../../schemas/conversation_members";
+} from "@relay/shared";
 import { notifyUsers } from "../utils/notifyUsers";
 import rateLimitAck from "../utils/rateLimitAck";
 

@@ -8,7 +8,7 @@ import {
 } from "../controllers/auth.controller";
 import { protectRoute } from "../middlewares/auth.middleware";
 import validate from "../middlewares/validation.middleware";
-import { LoginBodySchema, RegisterBodySchema } from "../schemas/auth";
+import { LoginBodySchema, RegisterBodySchema } from "@relay/shared";
 import { authLimiter } from "../middlewares/rate.limit.middleware";
 
 const router = express.Router();

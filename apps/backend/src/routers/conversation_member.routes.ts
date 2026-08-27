@@ -1,9 +1,9 @@
 import express from "express";
 import { protectRoute } from "../middlewares/auth.middleware";
 import validate from "../middlewares/validation.middleware";
-import { ConversationParamsSchema } from "../schemas/conversations";
-import { UserIdParamsSchema } from "../schemas/users";
-import { ConversationMemberQuerySchema } from "../schemas/conversation_members";
+import { ConversationParamsSchema } from "@relay/shared";
+import { UserIdParamsSchema } from "@relay/shared";
+import { ConversationMemberQuerySchema } from "@relay/shared";
 import {
   addMember,
   getConversationMembers,

@@ -3,8 +3,8 @@ import {
   USER_PUBLIC_PROJECTION,
 } from "../database/queries/users";
 import pool from "../database/db";
-import { UserPrivate, UserPublic } from "../schemas/users";
-import { RegisterBody } from "../schemas/auth";
+import { UserPrivate, UserPublic } from "@relay/shared";
+import { RegisterBody } from "@relay/shared";
 import buildInsertQueries from "../utils/query-builder/buildInsertQueries";
 
 export const findById = async (userId: string): Promise<UserPublic> => {

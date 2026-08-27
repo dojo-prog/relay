@@ -2,7 +2,7 @@ import {
   Conversation,
   ConversationType,
   ConversationWithRelations,
-} from "../schemas/conversations";
+} from "@relay/shared";
 import { PaginationResult, UpdateResult } from "./common";
 
 // =======================================

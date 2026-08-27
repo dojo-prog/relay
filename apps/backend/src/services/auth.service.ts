@@ -7,7 +7,7 @@ import {
   generateRefreshToken,
 } from "../utils/auth/generateAuthTokens";
 import ENV from "../config/env";
-import { LoginBody, RegisterBody } from "../schemas/auth";
+import { LoginBody, RegisterBody } from "@relay/shared";
 import {
   LoginResult,
   RefreshTokenPayload,

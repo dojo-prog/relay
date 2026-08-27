@@ -4,7 +4,7 @@ import {
   CreateMessageInputSchema,
   DeleteMessageInputSchema,
   UpdateMessageInputSchema,
-} from "../../schemas/messages/message.events";
+} from "@relay/shared";
 import handleError from "../utils/handleError";
 import { notifyConversationMembers } from "../utils/notifyUsers";
 

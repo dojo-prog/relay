@@ -4,7 +4,7 @@ import {
   ConversationQuerySchema,
   CreateConversationBody,
   UpdateConversationBody,
-} from "../schemas/conversations";
+} from "@relay/shared";
 
 export const getUserConversations: Controller = async (req, res, next) => {
   try {

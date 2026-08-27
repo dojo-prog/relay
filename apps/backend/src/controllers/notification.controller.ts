@@ -1,6 +1,6 @@
 import { Controller } from "../types/handlers";
 import * as notificationService from "../services/notification.service";
-import { NotificationQuerySchema } from "../schemas/notifications";
+import { NotificationQuerySchema } from "@relay/shared";
 
 export const getNotifications: Controller = async (req, res, next) => {
   try {
@@ -49,13 +49,11 @@ export const deleteRead: Controller = async (req, res, next) => {
   try {
     const notificationIds = await notificationService.deleteRead(req.user!.id);
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Deleted read notifications",
-        data: { notificationIds },
-      });
+    res.status(200).json({
+      success: true,
+      message: "Deleted read notifications",
+      data: { notificationIds },
+    });
   } catch (error) {
     next(error);
   }

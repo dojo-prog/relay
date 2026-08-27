@@ -1,5 +1,5 @@
 import pool from "../database/db";
-import { Notification, NotificationQuery } from "../schemas/notifications";
+import { Notification, NotificationQuery } from "@relay/shared";
 import { CreateNotificationData } from "../types/notification.types";
 import buildFilterQueries from "../utils/query-builder/buildFilterQueries";
 import buildInsertQueries from "../utils/query-builder/buildInsertQueries";

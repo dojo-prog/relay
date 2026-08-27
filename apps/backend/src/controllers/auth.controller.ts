@@ -1,4 +1,4 @@
-import { LoginBody, RegisterBody } from "../schemas/auth";
+import { LoginBody, RegisterBody } from "@relay/shared";
 import { Controller } from "../types/handlers";
 
 import * as authService from "../services/auth.service";

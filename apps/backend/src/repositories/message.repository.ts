@@ -3,11 +3,7 @@ import {
   MESSAGE_JOINS,
   MESSAGE_RELATIONS_PROJECTION,
 } from "../database/queries/messages";
-import {
-  Message,
-  MessageQuery,
-  MessageWithRelations,
-} from "../schemas/messages";
+import { Message, MessageQuery, MessageWithRelations } from "@relay/shared";
 import { CreateMessageData } from "../types/message.types";
 import buildFilterQueries from "../utils/query-builder/buildFilterQueries";
 import buildInsertQueries from "../utils/query-builder/buildInsertQueries";

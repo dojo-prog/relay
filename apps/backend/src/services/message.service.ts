@@ -1,4 +1,4 @@
-import { MessageQuery, MessageWithRelations } from "../schemas/messages";
+import { MessageQuery, MessageWithRelations } from "@relay/shared";
 import AppError from "../utils/AppError";
 
 import * as messageRepository from "../repositories/message.repository";

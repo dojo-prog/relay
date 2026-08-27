@@ -1,5 +1,5 @@
 import * as notificationRepository from "../repositories/notification.repository";
-import { Notification, NotificationQuery } from "../schemas/notifications";
+import { Notification, NotificationQuery } from "@relay/shared";
 import {
   CreateNotificationParams,
   GetNotificationsResult,

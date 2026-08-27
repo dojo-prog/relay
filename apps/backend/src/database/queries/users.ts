@@ -1,4 +1,4 @@
-import { UserPrivateSchema, UserPublicSchema } from "../../schemas/users";
+import { UserPrivateSchema, UserPublicSchema } from "@relay/shared";
 
 export const USER_PUBLIC_KEYS = Object.keys(UserPublicSchema.shape);
 

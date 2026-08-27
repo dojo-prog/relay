@@ -2,7 +2,7 @@
 // AUTH TOKEN PAYLOADS
 // =======================================
 
-import { UserPublic } from "../schemas/users";
+import { UserPublic } from "@relay/shared";
 
 export interface AccessTokenPayload {
   id: string;

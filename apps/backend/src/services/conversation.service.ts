@@ -1,7 +1,4 @@
-import {
-  ConversationQuery,
-  ConversationWithRelations,
-} from "../schemas/conversations";
+import { ConversationQuery, ConversationWithRelations } from "@relay/shared";
 import {
   CreateConversationParams,
   DeleteConversationParams,
@@ -18,11 +15,11 @@ import calculateTotalPages from "../utils/calculateTotalPages";
 import AppError from "../utils/AppError";
 import generateChanges from "../utils/generateChanges";
 import pool from "../database/db";
-import { Message } from "../schemas/messages";
+import { Message } from "@relay/shared";
 
 import * as conversationRepository from "../repositories/conversation.repository";
 import * as conversationMemberRepository from "../repositories/conversation_member.repository";
-import { ConversationMember } from "../schemas/conversation_members";
+import { ConversationMember } from "@relay/shared";
 
 export const getUserConversations = async (
   userId: string,

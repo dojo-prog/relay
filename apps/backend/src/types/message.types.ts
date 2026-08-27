@@ -1,4 +1,4 @@
-import { Message, MessageWithRelations } from "../schemas/messages";
+import { Message, MessageWithRelations } from "@relay/shared";
 import { PaginationResult, UpdateResult } from "./common";
 
 // =======================================

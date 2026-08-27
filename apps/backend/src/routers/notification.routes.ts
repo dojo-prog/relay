@@ -4,7 +4,7 @@ import validate from "../middlewares/validation.middleware";
 import {
   NotificationIdParamsSchema,
   NotificationQuerySchema,
-} from "../schemas/notifications";
+} from "@relay/shared";
 import {
   deleteRead,
   getNotifications,

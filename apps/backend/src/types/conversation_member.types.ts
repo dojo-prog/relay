@@ -1,4 +1,4 @@
-import { ConversationMemberWithRelations } from "../schemas/conversation_members";
+import { ConversationMemberWithRelations } from "@relay/shared";
 import { PaginationResult } from "./common";
 
 // =======================================
