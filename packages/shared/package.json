@@ -1,0 +1,16 @@
+{
+  "name": "@relay/shared",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "keywords": [],
+  "author": "Dojo",
+  "license": "ISC",
+  "type": "commonjs"
+}

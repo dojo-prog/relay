@@ -1,0 +1,21 @@
+{
+  "name": "relay",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:backend": "npm run dev -w @relay/backend",
+    "dev:frontend": "npm run dev -w @relay/frontend",
+    "watch:shared": "npm run watch -w @relay/shared",
+    "build:backend": "npm run build -w @relay/backend",
+    "build:frontend": "npm run build -w @relay/frontend",
+    "build:shared": "npm run build -w @relay/shared",
+    "build": "npm run build --workspaces"
+  },
+  "keywords": [],
+  "author": "Dojo",
+  "license": "ISC"
+}
