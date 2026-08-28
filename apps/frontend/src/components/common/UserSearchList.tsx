@@ -1,8 +1,9 @@
+import type { UserPublic } from "@relay/shared";
 import UserSearchItem from "./UserSearchItem";
 
 interface UserSearchListProps {
-  users: { id: string; username: string }[];
-  handleSelect: (user: { id: string; username: string }) => void;
+  users: UserPublic[];
+  handleSelect: (user: UserPublic) => void;
 }
 
 const UserSearchList = ({ users, handleSelect }: UserSearchListProps) => {

@@ -1,8 +1,9 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import type { UserPublic } from "@relay/shared";
 
 interface UserSearchItemProps {
-  user: { id: string; username: string };
-  handleSelect: (user: { id: string; username: string }) => void;
+  user: UserPublic;
+  handleSelect: (user: UserPublic) => void;
 }
 
 const UserSearchItem = ({ user, handleSelect }: UserSearchItemProps) => {

@@ -1,9 +1,10 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import type { UserPublic } from "@relay/shared";
 import { XIcon } from "lucide-react";
 
 interface SelectedUserProps {
-  user: { id: string; username: string };
+  user: UserPublic;
   handleRemove: (userId: string) => void;
 }
 

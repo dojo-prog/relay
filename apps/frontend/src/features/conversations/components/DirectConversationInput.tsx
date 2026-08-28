@@ -1,6 +1,6 @@
 import SelectedUser from "@/components/common/SelectedUserItem";
 import UserSearch from "@/components/common/UserSearch";
-import type { CreateConversationBody } from "@relay/shared";
+import type { CreateConversationBody, UserPublic } from "@relay/shared";
 import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
@@ -10,12 +10,9 @@ interface DirectConversationProps {
 
 const DirectConversationInput = ({ form }: DirectConversationProps) => {
   const [search, setSearch] = useState("");
-  const [selectedUser, setSelectedUser] = useState<{
-    username: string;
-    id: string;
-  } | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserPublic | null>(null);
 
-  const handleSelectUser = (user: { id: string; username: string }) => {
+  const handleSelectUser = (user: UserPublic) => {
     form.setValue("memberIds", [user.id], {
       shouldValidate: true,
       shouldDirty: true,

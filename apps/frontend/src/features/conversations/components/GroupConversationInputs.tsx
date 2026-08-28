@@ -2,7 +2,7 @@ import SelectedUser from "@/components/common/SelectedUserItem";
 import UserSearch from "@/components/common/UserSearch";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import type { CreateConversationBody } from "@relay/shared";
+import type { CreateConversationBody, UserPublic } from "@relay/shared";
 import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
@@ -12,15 +12,11 @@ interface GroupConversationProps {
 
 const GroupConversationInputs = ({ form }: GroupConversationProps) => {
   const [search, setSearch] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState<
-    { id: string; username: string }[]
-  >([]);
+  const [selectedUsers, setSelectedUsers] = useState<UserPublic[]>([]);
 
   const memberIds = form.watch("memberIds");
 
-  console.log(memberIds);
-
-  const handleSelectUser = (user: { id: string; username: string }) => {
+  const handleSelectUser = (user: UserPublic) => {
     setSearch("");
 
     if (memberIds?.includes(user.id)) return;
