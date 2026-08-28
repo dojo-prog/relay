@@ -25,7 +25,7 @@ export const find = async (
   const specific = { type };
 
   const { conditions: baseCon, values: baseVal } =
-    buildConversationSpecificFilters(specific);
+    buildConversationSpecificFilters(specific, [], [userId]);
 
   const { whereClause, limitClause, offsetClause, values } = buildFilterQueries(
     rest,

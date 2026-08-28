@@ -2,9 +2,11 @@ import { ConversationSpecificQuery } from "@relay/shared";
 
 const buildConversationSpecificFilters = (
   specific: ConversationSpecificQuery,
+  baseConditions: string[] = [],
+  baseValues: unknown[] = [],
 ) => {
-  const conditions = [];
-  const values = [];
+  const conditions = [...baseConditions];
+  const values = [...baseValues];
 
   const { type } = specific;
 
