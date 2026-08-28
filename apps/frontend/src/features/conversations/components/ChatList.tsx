@@ -1,12 +1,12 @@
 import SearchInput from "@/components/common/SearchInput";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { LogOut, MessageCircle, SquarePlus } from "lucide-react";
+import { LogOut, MessageCircle } from "lucide-react";
 import ChatTabs from "./ChatTabs";
 import useAuthStore from "@/stores/auth.store";
 import { toast } from "sonner";
 import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
-import TooltipWrapper from "@/components/common/TooltipWrapper";
+import CreateConversationButton from "./CreateConversationButton";
 
 const ChatList = () => {
   const { logout } = useAuthStore();
@@ -30,16 +30,7 @@ const ChatList = () => {
         </div>
 
         {/* Create Conversation */}
-        <TooltipWrapper content={"Create conversation"}>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-10"
-            aria-label="Create conversation"
-          >
-            <SquarePlus className="size-5" />
-          </Button>
-        </TooltipWrapper>
+        <CreateConversationButton />
       </div>
 
       {/* Searchbar */}
