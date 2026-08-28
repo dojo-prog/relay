@@ -1,4 +1,4 @@
-const getReqEnv = async (name: string) => {
+const getReqEnv = (name: string): string => {
   const value = import.meta.env[name];
 
   if (!value) {
