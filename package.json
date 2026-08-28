@@ -10,6 +10,7 @@
     "dev:backend": "npm run dev -w @relay/backend",
     "dev:frontend": "npm run dev -w @relay/frontend",
     "watch:shared": "npm run watch -w @relay/shared",
+    "db:seed:backend": "npm run db:seed -w @relay/backend",
     "build:backend": "npm run build -w @relay/backend",
     "build:frontend": "npm run build -w @relay/frontend",
     "build:shared": "npm run build -w @relay/shared",
