@@ -15,15 +15,13 @@ const router = express.Router();
 
 router.get("/me", protectRoute, getCurrentUser);
 
-router.use(authLimiter);
-
 router.post(
   "/register",
-
+  authLimiter,
   validate({ body: RegisterBodySchema }),
   register,
 );
-router.post("/login", validate({ body: LoginBodySchema }), login);
+router.post("/login", authLimiter, validate({ body: LoginBodySchema }), login);
 router.post("/logout", logout);
 router.post("/refresh", refreshAccessToken);
 
