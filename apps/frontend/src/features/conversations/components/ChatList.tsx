@@ -6,6 +6,7 @@ import ChatTabs from "./ChatTabs";
 import useAuthStore from "@/stores/auth.store";
 import { toast } from "sonner";
 import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
+import TooltipWrapper from "@/components/common/TooltipWrapper";
 
 const ChatList = () => {
   const { logout } = useAuthStore();
@@ -28,15 +29,17 @@ const ChatList = () => {
           <MessageCircle className="size-5 text-primary-foreground" />
         </div>
 
-        {/* Create Group */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-10"
-          aria-label="Create group"
-        >
-          <SquarePlus className="size-5" />
-        </Button>
+        {/* Create Conversation */}
+        <TooltipWrapper content={"Create conversation"}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-10"
+            aria-label="Create conversation"
+          >
+            <SquarePlus className="size-5" />
+          </Button>
+        </TooltipWrapper>
       </div>
 
       {/* Searchbar */}
