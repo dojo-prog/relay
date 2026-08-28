@@ -9,6 +9,24 @@ export const CONVERSATION_RELATIONS_PROJECTION = `
     'id', u.id,
     'username', u.username
   ) AS created_by
+
+  (
+    SELECT jsonb_build_object(
+      'id', m.id,
+      'content', m.content,
+      'created_at', m.created_at,
+      'sender', jsonb_build_object(
+        'id', sender.id,
+        'username', sender.username
+      )
+    )
+    FROM messages m
+    JOIN users sender
+      ON sender.id = m.sender_id
+    WHERE m.conversation_id = c.id
+    ORDER BY m.created_at DESC
+    LIMIT 1
+  ) AS last_message
 `;
 
 export const CONVERSATION_JOINS = `

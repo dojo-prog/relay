@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { IsoDatetimeSchema, NonNegativeIntSchema, UUIDSchema } from "../common";
 import { UsernameSchema } from "../users";
+import { MessageContentSchema } from "../messages";
 
 // =======================================
 // REUSABLE FIELDS
@@ -41,6 +42,17 @@ export const ConversationWithRelationsSchema = ConversationEntitySchema.omit({
   created_by: z.object({
     id: UUIDSchema,
     username: UsernameSchema,
+  }),
+
+  last_message: z.object({
+    sender: z.object({
+      id: UUIDSchema,
+      username: UsernameSchema,
+    }),
+
+    id: UUIDSchema,
+    content: MessageContentSchema,
+    created_at: IsoDatetimeSchema,
   }),
 });
 
