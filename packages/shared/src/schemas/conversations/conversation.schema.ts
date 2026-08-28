@@ -44,6 +44,13 @@ export const ConversationWithRelationsSchema = ConversationEntitySchema.omit({
     username: UsernameSchema,
   }),
 
+  participant: z
+    .object({
+      id: UUIDSchema,
+      username: UsernameSchema,
+    })
+    .nullable(),
+
   last_message: z.object({
     sender: z.object({
       id: UUIDSchema,

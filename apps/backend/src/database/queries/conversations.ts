@@ -8,7 +8,23 @@ export const CONVERSATION_RELATIONS_PROJECTION = `
   jsonb_build_object(
     'id', u.id,
     'username', u.username
-  ) AS created_by
+  ) AS created_by,
+
+  CASE
+    WHEN c.type = 'direct' THEN (
+      SELECT jsonb_build_object(
+        'id', p.id,
+        'username', p.username
+      )
+      FROM conversation_members pcm
+      JOIN users p
+        ON p.id = pcm.user_id
+      WHERE pcm.conversation_id = c.id
+        AND pcm.user_id <> $1
+      LIMIT 1
+    )
+    ELSE NULL
+  END AS participant,
 
   (
     SELECT jsonb_build_object(
@@ -30,9 +46,10 @@ export const CONVERSATION_RELATIONS_PROJECTION = `
 `;
 
 export const CONVERSATION_JOINS = `
-  JOIN conversation_members cm 
+  JOIN conversation_members cm
     ON cm.conversation_id = c.id
+   AND cm.user_id = $1
 
-  JOIN users u 
+  JOIN users u
     ON u.id = c.created_by
 `;
