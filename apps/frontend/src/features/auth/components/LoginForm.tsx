@@ -19,11 +19,17 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type LoginBody, LoginBodySchema } from "@relay/shared";
+import useAuthStore from "@/stores/auth.store";
+import { toast } from "sonner";
+import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
+import { Loader2 } from "lucide-react";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const { login, loading } = useAuthStore();
+
   const form = useForm<LoginBody>({
     resolver: zodResolver(LoginBodySchema),
 
@@ -33,14 +39,13 @@ export function LoginForm({
     },
   });
 
-  // TODO apply api
-  const onSubmit = (values: LoginBody) => {
+  const onSubmit = async (values: LoginBody) => {
     try {
-      console.log(values);
+      await login(values);
+
+      toast.success("Login successful");
     } catch (error: any) {
-      form.setError("root", {
-        message: error.message,
-      });
+      toast.error(getApiErrorMessage(error));
     }
   };
 
@@ -80,12 +85,14 @@ export function LoginForm({
                 <FieldError errors={[form.formState.errors.password]} />
               </Field>
 
-              {form.formState.errors.root && (
-                <FieldError errors={[form.formState.errors.root]} />
-              )}
-
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit" disabled={loading}>
+                  {!loading ? (
+                    "Login"
+                  ) : (
+                    <Loader2 className="size-5 animate-spin" />
+                  )}
+                </Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account?{" "}
                   <Link to={"/auth/signup"}>Sign up</Link>

@@ -19,11 +19,17 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { RegisterBodySchema, type RegisterBody } from "@relay/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useAuthStore from "@/stores/auth.store";
+import { toast } from "sonner";
+import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
+import { Loader2 } from "lucide-react";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const { register, loading } = useAuthStore();
+
   const form = useForm<RegisterBody>({
     resolver: zodResolver(RegisterBodySchema),
 
@@ -35,12 +41,13 @@ export function SignupForm({
     },
   });
 
-  // TODO apply api
-  const onSubmit = (values: RegisterBody) => {
+  const onSubmit = async (values: RegisterBody) => {
     try {
-      console.log(values);
+      await register(values);
+
+      toast.success("Signup successful");
     } catch (error: any) {
-      form.setError("root", { message: error.message });
+      toast.error(getApiErrorMessage(error));
     }
   };
 
@@ -120,7 +127,13 @@ export function SignupForm({
               </Field>
 
               <Field>
-                <Button type="submit">Create Account</Button>
+                <Button type="submit" disabled={loading}>
+                  {!loading ? (
+                    "Create Account"
+                  ) : (
+                    <Loader2 className="size-5 animate-spin" />
+                  )}
+                </Button>
                 <FieldDescription className="text-center">
                   Already have an account?{" "}
                   <Link to={"/auth/login"}>Sign in</Link>
