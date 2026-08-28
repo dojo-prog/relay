@@ -1,10 +1,24 @@
 import SearchInput from "@/components/common/SearchInput";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { MessageCircle, SquarePlus } from "lucide-react";
+import { LogOut, MessageCircle, SquarePlus } from "lucide-react";
 import ChatTabs from "./ChatTabs";
+import useAuthStore from "@/stores/auth.store";
+import { toast } from "sonner";
+import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
 
 const ChatList = () => {
+  const { logout } = useAuthStore();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast.success("Logout successful");
+    } catch (error) {
+      toast.error(getApiErrorMessage(error));
+    }
+  };
+
   return (
     <Card className="flex h-full w-full flex-col gap-0 p-4">
       {/* Header */}
@@ -31,7 +45,21 @@ const ChatList = () => {
       </div>
 
       {/* Tabs */}
-      <ChatTabs />
+      <div className="flex-1 overflow-y-auto">
+        <ChatTabs />
+      </div>
+
+      {/* Logout Button */}
+      <div className="h-14 w-full pt-2 border-t border-secondary">
+        <Button
+          variant={"ghost"}
+          className={"h-full w-full flex items-center"}
+          onClick={handleLogout}
+        >
+          <LogOut className="mr-1 size-5" />
+          <span className="text-m">Logout</span>
+        </Button>
+      </div>
     </Card>
   );
 };
