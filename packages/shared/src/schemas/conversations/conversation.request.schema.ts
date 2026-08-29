@@ -22,7 +22,7 @@ export const ConversationParamsSchema = z.object({
 // =======================================
 
 export const ConversationSpecificQuerySchema = z.object({
-  type: ConversationTypeSchema,
+  type: ConversationTypeSchema.optional(),
 });
 
 export const ConversationQuerySchema = z.object({
