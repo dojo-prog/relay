@@ -6,3 +6,11 @@ export const getConversations = async (params: ConversationQuery) => {
 
   return data;
 };
+
+export const getConversation = async (conversationId: string) => {
+  const { data } = await axiosInstance.get(
+    `/v1/conversations/${conversationId}`,
+  );
+
+  return data;
+};
