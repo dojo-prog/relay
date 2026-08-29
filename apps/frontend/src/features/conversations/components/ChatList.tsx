@@ -7,9 +7,12 @@ import useAuthStore from "@/stores/auth.store";
 import { toast } from "sonner";
 import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
 import CreateConversationButton from "./CreateConversationButton";
+import { useState } from "react";
 
 const ChatList = () => {
   const { logout } = useAuthStore();
+
+  const [search, setSearch] = useState<string>("");
 
   const handleLogout = async () => {
     try {
@@ -35,12 +38,15 @@ const ChatList = () => {
 
       {/* Searchbar */}
       <div className="my-4">
-        <SearchInput />
+        <SearchInput
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </div>
 
       {/* Tabs */}
       <div className="flex-1 overflow-y-auto">
-        <ChatTabs />
+        <ChatTabs search={search} />
       </div>
 
       {/* Logout Button */}

@@ -1,7 +1,11 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ConversationList from "./ConversationList";
 
-const ChatTabs = () => {
+interface ChatTabsProps {
+  search: string;
+}
+
+const ChatTabs = ({ search }: ChatTabsProps) => {
   return (
     <Tabs defaultValue="all" className="w-full">
       <TabsList className="w-full">
@@ -10,7 +14,7 @@ const ChatTabs = () => {
         <TabsTrigger value="groups">Groups</TabsTrigger>
       </TabsList>
 
-      <ConversationList />
+      <ConversationList search={search} />
     </Tabs>
   );
 };
