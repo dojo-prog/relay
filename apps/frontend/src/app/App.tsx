@@ -46,6 +46,7 @@ const App = () => {
           element={user ? <ChatLayout /> : <Navigate to={"/auth"} />}
         >
           <Route index element={<ChatPage />} />
+          <Route path="conversations/:conversationId" element={<ChatPage />} />
         </Route>
 
         {/* Auth */}

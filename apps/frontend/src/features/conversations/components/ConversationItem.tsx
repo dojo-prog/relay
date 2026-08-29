@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { ConversationWithRelations } from "@relay/shared";
 import { Users2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 type ConversationItemProps = {
   conversation: ConversationWithRelations;
@@ -13,16 +14,22 @@ const ConversationItem = ({
   conversation,
   isActive,
 }: ConversationItemProps) => {
-  const unreadCount = conversation.unread_count;
+  const navigate = useNavigate();
 
+  const unreadCount = conversation.unread_count;
   const isGroup = conversation.type === "group";
 
   const conversationName = isGroup
     ? conversation.name
     : conversation.participant?.username;
 
+  const handleClick = () => {
+    navigate(`/conversations/${conversation.id}`);
+  };
+
   return (
     <button
+      onClick={handleClick}
       className={cn(
         "flex w-full items-center gap-3 rounded-lg p-3 text-left",
         "hover:bg-accent",
