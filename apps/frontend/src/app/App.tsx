@@ -8,6 +8,7 @@ import ChatPage from "../pages/chat/ChatPage";
 import { Toaster } from "@/components/ui/sonner";
 import useAuthStore from "@/stores/auth.store";
 import { useEffect } from "react";
+import { socket } from "@/services/socket/socket";
 
 const App = () => {
   const { user, checkAuth } = useAuthStore();
@@ -15,6 +16,18 @@ const App = () => {
   useEffect(() => {
     checkAuth();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      socket.connect();
+    } else {
+      socket.disconnect();
+    }
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [user]);
 
   return (
     <>
