@@ -12,6 +12,7 @@ const env = {
   appName: getReqEnv("VITE_APP_NAME"),
   environment: getReqEnv("VITE_ENVIRONMENT"),
   apiUrl: getReqEnv("VITE_API_URL"),
+  socketUrl: getReqEnv("VITE_SOCKET_URL"),
 } as const;
 
 export { env };
