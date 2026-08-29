@@ -1,7 +1,10 @@
-import { type ChangeEvent } from "react";
+import { useEffect, useRef, type ChangeEvent } from "react";
+
 import SearchInput from "./SearchInput";
 import UserSearchList from "./UserSearchList";
+
 import { useUsers } from "@/features/users/hooks/useUsers";
+
 import type { UserPublic } from "@relay/shared";
 
 interface UserSearchProps {
@@ -11,15 +14,45 @@ interface UserSearchProps {
 }
 
 const UserSearch = ({ value, onChange, handleSelect }: UserSearchProps) => {
-  const { data, isPending, isError } = useUsers({
-    page: 1,
-    limit: 20,
-    search: value,
-  });
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  const {
+    data,
+    isPending,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useUsers(value);
 
   const shouldShowResults = value.trim().length >= 2;
 
-  const users = data?.data?.users ?? [];
+  const users = data?.pages.flatMap((page) => page.data.users) ?? [];
+
+  useEffect(() => {
+    const element = loadMoreRef.current;
+
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+
+        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        threshold: 0.5,
+      },
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
     <div className="relative h-max">
@@ -44,7 +77,24 @@ const UserSearch = ({ value, onChange, handleSelect }: UserSearchProps) => {
           )}
 
           {!isPending && !isError && users.length > 0 && (
-            <UserSearchList users={users} handleSelect={handleSelect} />
+            <div className="max-h-64 overflow-y-auto rounded-md border bg-background">
+              <UserSearchList users={users} handleSelect={handleSelect} />
+
+              {/* IntersectionObserver watches this */}
+              <div ref={loadMoreRef} className="h-1" />
+
+              {isFetchingNextPage && (
+                <div className="p-2 text-center text-sm text-muted-foreground">
+                  Loading more...
+                </div>
+              )}
+
+              {!hasNextPage && (
+                <div className="p-2 text-center text-sm text-muted-foreground">
+                  End of result...
+                </div>
+              )}
+            </div>
           )}
 
           {!isPending && !isError && users.length === 0 && (
