@@ -11,7 +11,7 @@ export const useConversations = ({
   search?: string;
 }) => {
   return useInfiniteQuery({
-    queryKey: ["conversations"],
+    queryKey: ["conversations", { type, search }],
 
     queryFn: ({ pageParam }) => {
       const params: ConversationQuery = {
