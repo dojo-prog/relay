@@ -8,10 +8,13 @@ import {
 } from "@/components/ui/dialog";
 import { SquarePlus } from "lucide-react";
 import CreateConversationForm from "./CreateConversationForm";
+import { useState } from "react";
 
 const CreateConversationButton = () => {
+  const [open, setOpen] = useState<boolean>(false);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <TooltipWrapper content={"Create conversation"}>
         <DialogTrigger
           render={
@@ -30,7 +33,7 @@ const CreateConversationButton = () => {
       <DialogContent className={"w-md"}>
         <DialogTitle>Create Conversation</DialogTitle>
 
-        <CreateConversationForm />
+        <CreateConversationForm onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );
