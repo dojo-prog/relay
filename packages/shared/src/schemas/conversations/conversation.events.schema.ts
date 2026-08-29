@@ -28,3 +28,23 @@ export const DeleteConversationInputSchema = z.object({
 export const MarkConversationAsReadInputSchema = z.object({
   conversationId: UUIDSchema,
 });
+
+// =======================================
+// TYPES
+// =======================================
+
+export type CreateConversationInput = z.input<
+  typeof CreateConversationInputSchema
+>;
+
+export type UpdateConversationInput = z.input<
+  typeof UpdateConversationInputSchema
+>;
+
+export type DeleteConversationInput = z.input<
+  typeof DeleteConversationInputSchema
+>;
+
+export type MarkConversationAsReadInput = z.input<
+  typeof MarkConversationAsReadInputSchema
+>;
