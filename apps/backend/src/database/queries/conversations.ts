@@ -42,7 +42,17 @@ export const CONVERSATION_RELATIONS_PROJECTION = `
     WHERE m.conversation_id = c.id
     ORDER BY m.created_at DESC
     LIMIT 1
-  ) AS last_message
+  ) AS last_message,
+
+  (
+    SELECT
+      c2.message_sequence - cm.last_read_sequence AS unread_count
+    FROM conversations c2
+    JOIN conversation_members cm
+      ON cm.conversation_id = c2.id
+    WHERE c2.id = c.id
+      AND cm.user_id = $1
+  ) AS unread_count
 `;
 
 export const CONVERSATION_JOINS = `

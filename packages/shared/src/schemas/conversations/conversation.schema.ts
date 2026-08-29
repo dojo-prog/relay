@@ -61,6 +61,8 @@ export const ConversationWithRelationsSchema = ConversationEntitySchema.omit({
     content: MessageContentSchema,
     created_at: IsoDatetimeSchema,
   }),
+
+  unread_count: NonNegativeIntSchema,
 });
 
 // =======================================
