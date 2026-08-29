@@ -23,12 +23,12 @@ export const ConversationParamsSchema = z.object({
 
 export const ConversationSpecificQuerySchema = z.object({
   type: ConversationTypeSchema.optional(),
+  search: SearchQuerySchema,
 });
 
 export const ConversationQuerySchema = z.object({
   ...PaginationQuerySchema.shape,
   ...ConversationSpecificQuerySchema.shape,
-  search: SearchQuerySchema,
 });
 
 // =======================================
