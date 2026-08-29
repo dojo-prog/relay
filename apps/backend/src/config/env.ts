@@ -55,6 +55,8 @@ const ENV = {
   CLOUDINARY_CLOUD_NAME: getReqEnvStr("CLOUDINARY_CLOUD_NAME"),
   CLOUDINARY_API_KEY: getReqEnvStr("CLOUDINARY_API_KEY"),
   CLOUDINARY_API_SECRET: getReqEnvStr("CLOUDINARY_API_SECRET"),
+
+  CLIENT_URL: getReqEnvStr("CLIENT_URL"),
 } as const;
 
 export default ENV;
