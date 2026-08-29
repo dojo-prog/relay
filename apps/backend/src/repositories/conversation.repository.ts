@@ -20,34 +20,38 @@ import { Message } from "@relay/shared";
 export const find = async (
   userId: string,
   filters: ConversationQuery,
-): Promise<{ conversations: ConversationWithRelations[]; total: number }> => {
-  const { type, ...rest } = filters;
-  const specific = { type };
+): Promise<{
+  conversations: ConversationWithRelations[];
+  total: number;
+}> => {
+  const { type, search, ...rest } = filters;
 
-  const { conditions: baseCon, values: baseVal } =
-    buildConversationSpecificFilters(specific, [], [userId]);
+  const { conditions: baseConditions, values: baseValues } =
+    buildConversationSpecificFilters({ type, search }, [], [userId]);
 
-  const { whereClause, limitClause, offsetClause, values } = buildFilterQueries(
-    rest,
-    [...baseCon, `cm.user_id = $${baseVal.length + 1}`],
-    [...baseVal, userId],
-    ["c.name"],
-  );
+  const { whereClause, orderByClause, limitClause, offsetClause, values } =
+    buildFilterQueries(
+      rest,
+      [...baseConditions, `cm.user_id = $${baseValues.length + 1}`],
+      [...baseValues, userId],
+    );
 
   const { rows } = await pool.query(
     `
-    SELECT ${CONVERSATION_RELATIONS_PROJECTION},
-      COUNT(*) OVER()::INT AS total
-    FROM conversations c
-    ${CONVERSATION_JOINS}
-    ${whereClause}
-    ${limitClause}
-    ${offsetClause}
+      SELECT
+        ${CONVERSATION_RELATIONS_PROJECTION},
+        COUNT(*) OVER()::INT AS total
+      FROM conversations c
+      ${CONVERSATION_JOINS}
+      ${whereClause}
+      ${orderByClause}
+      ${limitClause}
+      ${offsetClause}
     `,
     values,
   );
 
-  const conversations = rows.map(({ total, ...con }) => con);
+  const conversations = rows.map(({ total, ...conversation }) => conversation);
 
   return {
     conversations,
