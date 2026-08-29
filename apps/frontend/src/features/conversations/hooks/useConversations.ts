@@ -6,12 +6,14 @@ import * as conversationApi from "../api/conversation.api";
 export const useConversations = ({
   type,
   search,
+  unread,
 }: {
   type?: ConversationType;
   search?: string;
+  unread?: boolean;
 }) => {
   return useInfiniteQuery({
-    queryKey: ["conversations", { type, search }],
+    queryKey: ["conversations", { type, search, unread }],
 
     queryFn: ({ pageParam }) => {
       const params: ConversationQuery = {
@@ -19,6 +21,7 @@ export const useConversations = ({
         limit: 10,
         type,
         search,
+        unread,
       };
 
       return conversationApi.getConversations(params);

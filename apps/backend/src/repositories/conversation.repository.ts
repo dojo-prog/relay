@@ -24,10 +24,10 @@ export const find = async (
   conversations: ConversationWithRelations[];
   total: number;
 }> => {
-  const { type, search, ...rest } = filters;
+  const { type, search, unread, ...rest } = filters;
 
   const { conditions: baseConditions, values: baseValues } =
-    buildConversationSpecificFilters({ type, search }, [], [userId]);
+    buildConversationSpecificFilters({ type, search, unread }, [], [userId]);
 
   const { whereClause, orderByClause, limitClause, offsetClause, values } =
     buildFilterQueries(
@@ -35,6 +35,8 @@ export const find = async (
       [...baseConditions, `cm.user_id = $${baseValues.length + 1}`],
       [...baseValues, userId],
     );
+
+  console.log(whereClause);
 
   const { rows } = await pool.query(
     `

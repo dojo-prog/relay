@@ -8,7 +8,7 @@ const buildConversationSpecificFilters = (
   const conditions = [...baseConditions];
   const values = [...baseValues];
 
-  const { type, search } = specific;
+  const { type, search, unread } = specific;
 
   // =======================================
   // CONVERSATION TYPE
@@ -50,6 +50,22 @@ const buildConversationSpecificFilters = (
         )
       )
     `);
+  }
+
+  // =======================================
+  // UNREAD
+  // =======================================
+
+  if (unread !== undefined) {
+    if (unread) {
+      conditions.push(`
+        c.message_sequence > cm.last_read_sequence
+      `);
+    } else {
+      conditions.push(`
+        c.message_sequence <= cm.last_read_sequence
+      `);
+    }
   }
 
   return {
