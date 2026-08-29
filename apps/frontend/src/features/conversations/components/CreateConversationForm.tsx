@@ -3,14 +3,21 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CreateConversationBodySchema,
-  type CreateConversationBody,
+  type CreateConversationInput,
 } from "@relay/shared";
 import { Controller, useForm } from "react-hook-form";
 import DirectConversationInput from "./DirectConversationInput";
 import GroupConversationInputs from "./GroupConversationInputs";
+import { useCreateConversation } from "../hooks/useCreateConversation";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
-const CreateConversationForm = () => {
-  const form = useForm<CreateConversationBody>({
+interface CreateConversationFormProps {
+  onSuccess?: () => void;
+}
+
+const CreateConversationForm = ({ onSuccess }: CreateConversationFormProps) => {
+  const form = useForm<CreateConversationInput>({
     resolver: zodResolver(CreateConversationBodySchema),
     defaultValues: {
       type: "direct",
@@ -22,8 +29,18 @@ const CreateConversationForm = () => {
   const type = form.watch("type");
   const memberIds = form.watch("memberIds");
 
-  const onSubmit = (values: CreateConversationBody) => {
-    console.log(values);
+  const { mutateAsync, isPending } = useCreateConversation();
+
+  const onSubmit = async (input: CreateConversationInput) => {
+    try {
+      await mutateAsync(input);
+
+      toast.success("Conversation created");
+
+      onSuccess?.();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -70,7 +87,11 @@ const CreateConversationForm = () => {
 
       {memberIds!.length > 0 && (
         <Button type="submit" className="mt-4 w-full">
-          Create conversation
+          {!isPending ? (
+            "Create conversation"
+          ) : (
+            <Loader2 className="animate-spin size-5" />
+          )}
         </Button>
       )}
     </form>
