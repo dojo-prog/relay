@@ -1,0 +1,95 @@
+import { socket } from "@/services/socket/socket";
+import type {
+  ConversationWithRelations,
+  CreateConversationInput,
+  DeleteConversationInput,
+  UpdateConversationInput,
+} from "@relay/shared";
+
+interface Response<T extends object> {
+  success: boolean;
+  message?: string;
+  data: T;
+}
+
+export const create = (
+  input: CreateConversationInput,
+): Promise<ConversationWithRelations> => {
+  return new Promise((resolve, reject) => {
+    socket.emit(
+      "conversation:create",
+      input,
+      (
+        response: Response<{
+          conversation: ConversationWithRelations;
+        }>,
+      ) => {
+        if (!response.success) {
+          reject(
+            new Error(response.message ?? "Failed to create conversation"),
+          );
+          return;
+        }
+
+        const conversation = response.data?.conversation;
+
+        if (!conversation) {
+          reject(new Error("Server did not return a conversation"));
+          return;
+        }
+
+        resolve(conversation);
+      },
+    );
+  });
+};
+
+export const update = (input: UpdateConversationInput) => {
+  return new Promise((resolve, reject) => {
+    socket.emit(
+      "conversation:update",
+      input,
+      (repsonse: Response<{ conversation: ConversationWithRelations }>) => {
+        if (!repsonse.success) {
+          reject(
+            new Error(repsonse.message ?? "Failed to update conversation"),
+          );
+
+          return;
+        }
+
+        const conversation = repsonse.data?.conversation;
+
+        if (!conversation) {
+          reject(new Error("Server did not return the updated conversation"));
+        }
+
+        resolve(conversation);
+      },
+    );
+  });
+};
+
+export const remove = (input: DeleteConversationInput) => {
+  return new Promise((resolve, reject) => {
+    socket.emit(
+      "conversation:delete",
+      input,
+      (response: Response<{ conversation: ConversationWithRelations }>) => {
+        if (!response.success) {
+          reject(
+            new Error(response.message ?? "Failed to delete conversation"),
+          );
+        }
+
+        const conversation = response.data?.conversation;
+
+        if (!conversation) {
+          reject(new Error("Server did not return the deleted conversation"));
+        }
+
+        resolve(conversation);
+      },
+    );
+  });
+};
