@@ -48,6 +48,20 @@ export const createConversation = async (
 ): Promise<ConversationWithRelations> => {
   const { userId, memberIds, ...rest } = params;
 
+  if (rest.type === "direct" && memberIds?.length) {
+    const existing = await conversationRepository.findDirectConversation(
+      userId,
+      memberIds[0],
+    );
+
+    if (existing) {
+      throw new AppError(
+        400,
+        "This direct conversation with the user already exists",
+      );
+    }
+  }
+
   const data = {
     ...rest,
     created_by: userId,

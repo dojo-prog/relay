@@ -107,6 +107,35 @@ export const findWithRelationsById = async (
   return rows[0];
 };
 
+export const findDirectConversation = async (
+  userId: string,
+  otherUserId: string,
+): Promise<ConversationWithRelations> => {
+  const { rows } = await pool.query(
+    `
+    SELECT ${CONVERSATION_RELATIONS_PROJECTION}
+    FROM conversations c
+    ${CONVERSATION_JOINS}
+    WHERE c.type = 'direct'
+      AND EXISTS (
+        SELECT 1
+        FROM conversation_members cm2
+        WHERE cm2.conversation_id = c.id
+          AND cm2.user_id = $2
+      )
+      AND (
+        SELECT COUNT(*)
+        FROM conversation_members cm3
+        WHERE cm3.conversation_id = c.id
+      ) = 2
+    LIMIT 1
+    `,
+    [userId, otherUserId],
+  );
+
+  return rows[0];
+};
+
 export const add = async (
   data: CreateConversationData,
   client?: PoolClient,
