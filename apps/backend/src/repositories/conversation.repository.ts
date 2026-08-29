@@ -59,8 +59,10 @@ export const findAll = async (userId: string): Promise<{ id: string }[]> => {
   const { rows } = await pool.query(
     ` 
     SELECT id 
-    FROM conversations
-    WHERE user_id = $1
+    FROM conversations c 
+    JOIN conversation_members cm
+      ON cm.conversation_id = c.id
+    WHERE cm.user_id = $1
     `,
     [userId],
   );
