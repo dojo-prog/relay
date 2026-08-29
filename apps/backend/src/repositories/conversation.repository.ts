@@ -89,16 +89,20 @@ export const findWithRelationsById = async (
   userId: string,
   conversationId: string,
 ): Promise<ConversationWithRelations> => {
+  console.log("called");
+
   const { rows } = await pool.query(
     `
     SELECT ${CONVERSATION_RELATIONS_PROJECTION}
     FROM conversations c
     ${CONVERSATION_JOINS}
-    WHERE id = $1
-      AND cm.user_id = $2
+    WHERE cm.user_id = $1
+      AND c.id = $2
     `,
-    [conversationId, userId],
+    [userId, conversationId],
   );
+
+  console.log(rows[0]);
 
   return rows[0];
 };
@@ -106,7 +110,7 @@ export const findWithRelationsById = async (
 export const add = async (
   data: CreateConversationData,
   client?: PoolClient,
-): Promise<ConversationWithRelations> => {
+): Promise<string> => {
   const conn = client ? client : pool;
 
   const { columnsStr, placeholdersStr, values } = buildInsertQueries(data);
@@ -120,10 +124,7 @@ export const add = async (
     values,
   );
 
-  const id = rows[0].id;
-  const { created_by } = data;
-
-  return await findWithRelationsById(created_by, id);
+  return rows[0].id;
 };
 
 export const update = async (
