@@ -9,22 +9,31 @@ import { Toaster } from "@/components/ui/sonner";
 import useAuthStore from "@/stores/auth.store";
 import { useEffect } from "react";
 import { socket } from "@/services/socket/socket";
+import { registerConversationListeners } from "@/services/socket/listeners/conversation.listeners";
+import { useQueryClient } from "@tanstack/react-query";
 
 const App = () => {
   const { user, checkAuth } = useAuthStore();
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     checkAuth();
   }, []);
 
   useEffect(() => {
-    if (user) {
-      socket.connect();
-    } else {
+    if (!user) {
       socket.disconnect();
+      return;
     }
 
+    socket.connect();
+
+    const cleanupConversationListeners =
+      registerConversationListeners(queryClient);
+
     return () => {
+      cleanupConversationListeners();
       socket.disconnect();
     };
   }, [user]);
