@@ -53,21 +53,21 @@ export const createConversation = async (
     created_by: userId,
   };
 
-  let conversation: ConversationWithRelations;
-
   const client = await pool.connect();
+
+  let conversationId: string;
 
   try {
     await client.query("BEGIN");
 
     // Create Conversation
-    conversation = await conversationRepository.add(data, client);
+    conversationId = await conversationRepository.add(data, client);
 
     // Add Creator as Member
     await conversationMemberRepository.add(
       {
         user_id: userId,
-        conversation_id: conversation.id,
+        conversation_id: conversationId,
       },
       client,
     );
@@ -78,7 +78,7 @@ export const createConversation = async (
         await conversationMemberRepository.add(
           {
             user_id: id,
-            conversation_id: conversation.id,
+            conversation_id: conversationId,
           },
           client,
         );
@@ -93,7 +93,10 @@ export const createConversation = async (
     client.release();
   }
 
-  return conversation;
+  return await conversationRepository.findWithRelationsById(
+    userId,
+    conversationId,
+  );
 };
 
 export const getConversationById = async (
