@@ -1,7 +1,8 @@
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { ConversationWithRelations } from "@relay/shared";
+import { Users2 } from "lucide-react";
 
 type ConversationItemProps = {
   conversation: ConversationWithRelations;
@@ -12,8 +13,7 @@ const ConversationItem = ({
   conversation,
   isActive,
 }: ConversationItemProps) => {
-  // TODO fetch unread_count per convo
-  const unreadCount = 2;
+  const unreadCount = conversation.unread_count;
 
   const isGroup = conversation.type === "group";
 
@@ -29,7 +29,15 @@ const ConversationItem = ({
         isActive && "bg-accent",
       )}
     >
-      <Avatar className={"h-10 w-10"}>{/* ... */}</Avatar>
+      <Avatar className={"size-10"}>
+        <AvatarFallback>
+          {conversation.type === "direct" ? (
+            conversation.participant?.username[0].toUpperCase()
+          ) : (
+            <Users2 className="size-5" />
+          )}
+        </AvatarFallback>
+      </Avatar>
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between">
