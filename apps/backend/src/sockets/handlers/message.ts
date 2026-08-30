@@ -42,7 +42,7 @@ const registerMessageHandlers = (io: Server, socket: Socket) => {
         userId: user.id,
         type: "message",
         message: `${user.username} sent a message`,
-        referenceId: newMessage.id,
+        referenceId: conversationId,
         excludeUserId: user.id,
       });
 
