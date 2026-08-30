@@ -6,6 +6,7 @@ import UserSearchList from "./UserSearchList";
 import { useUsers } from "@/features/users/hooks/useUsers";
 
 import type { UserPublic } from "@relay/shared";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface UserSearchProps {
   value: string;
@@ -16,6 +17,8 @@ interface UserSearchProps {
 const UserSearch = ({ value, onChange, handleSelect }: UserSearchProps) => {
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
+  const debouncedSearch = useDebounce(value, 500);
+
   const {
     data,
     isPending,
@@ -23,7 +26,7 @@ const UserSearch = ({ value, onChange, handleSelect }: UserSearchProps) => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useUsers(value);
+  } = useUsers(debouncedSearch);
 
   const shouldShowResults = value.trim().length >= 2;
 

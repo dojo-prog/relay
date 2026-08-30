@@ -3,6 +3,7 @@ import { useConversations } from "../hooks/useConversations";
 import type { ConversationType } from "@relay/shared";
 import { useEffect, useRef } from "react";
 import { Loader2 } from "lucide-react";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface ConversationListProps {
   search: string;
@@ -13,6 +14,8 @@ interface ConversationListProps {
 const ConversationList = ({ search, type, unread }: ConversationListProps) => {
   const observerRef = useRef<HTMLDivElement>(null);
 
+  const debouncedSearch = useDebounce(search, 500);
+
   const {
     data,
     isPending,
@@ -21,7 +24,7 @@ const ConversationList = ({ search, type, unread }: ConversationListProps) => {
     fetchNextPage,
     isFetchingNextPage,
   } = useConversations({
-    search,
+    search: debouncedSearch,
     type,
     unread,
   });
