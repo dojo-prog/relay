@@ -1,10 +1,13 @@
 import { socket } from "@/services/socket/socket";
 import type {
+  AddConversationMemberInput,
   Conversation,
+  ConversationMember,
   ConversationWithRelations,
   CreateConversationInput,
   DeleteConversationInput,
   MarkConversationAsReadInput,
+  RemoveConversationMemberInput,
   UpdateConversationInput,
 } from "@relay/shared";
 
@@ -112,6 +115,52 @@ export const read = (input: MarkConversationAsReadInput) => {
         }
 
         resolve("success");
+      },
+    );
+  });
+};
+
+export const addMember = (input: AddConversationMemberInput) => {
+  return new Promise((resolve, reject) => {
+    socket.emit(
+      "conversation:add_member",
+      input,
+      (response: Response<{ conversation_member: ConversationMember }>) => {
+        if (!response.success) {
+          reject(response.message ?? "Failed to add new member");
+        }
+
+        const newMember = response.data?.conversation_member;
+
+        if (!newMember) {
+          reject("Server did not return the new member details");
+        }
+
+        resolve(newMember);
+      },
+    );
+  });
+};
+
+export const removeMember = (input: RemoveConversationMemberInput) => {
+  return new Promise((resolve, reject) => {
+    socket.emit(
+      "conversation:remove_member",
+      input,
+      (response: Response<{ conversation_member: ConversationMember }>) => {
+        if (!response.success) {
+          reject(
+            response.message ?? "Failed to remove member from the conversation",
+          );
+        }
+
+        const removedMember = response.data?.conversation_member;
+
+        if (!removedMember) {
+          reject("Server did not return the new member details");
+        }
+
+        resolve(removedMember);
       },
     );
   });

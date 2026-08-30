@@ -22,8 +22,10 @@ export const useSocketListeners = () => {
 
     socket.connect();
 
-    const cleanupConversationListeners =
-      registerConversationListeners(queryClient);
+    const cleanupConversationListeners = registerConversationListeners(
+      queryClient,
+      user.id,
+    );
 
     const cleanupMessageListeners = registerMessageListener(queryClient);
 

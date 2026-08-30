@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import type { ConversationWithRelations } from "@relay/shared";
 import useAuthStore from "@/stores/auth.store";
 import EditConversationButton from "./EditConversationButton";
+import AddMemberButton from "./AddMemberButton";
+import RemoveMemberButton from "./RemoveMemberButton";
 
 type ChatHeaderProps = {
   conversation: ConversationWithRelations;
@@ -56,7 +58,11 @@ export const ChatHeader = ({ conversation }: ChatHeaderProps) => {
 
       {user!.id === conversation.created_by.id &&
         conversation.type === "group" && (
-          <EditConversationButton conversation={conversation} />
+          <div className="flex items-center">
+            <AddMemberButton conversation={conversation} />
+            <RemoveMemberButton conversation={conversation} />
+            <EditConversationButton conversation={conversation} />
+          </div>
         )}
     </header>
   );

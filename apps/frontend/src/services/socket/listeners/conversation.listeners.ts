@@ -15,7 +15,10 @@ export interface ConversationsPage {
   };
 }
 
-export const registerConversationListeners = (queryClient: QueryClient) => {
+export const registerConversationListeners = (
+  queryClient: QueryClient,
+  currentUserId: string,
+) => {
   const handleCreated = (conversation: ConversationWithRelations) => {
     queryClient.setQueriesData<InfiniteData<ConversationsPage>>(
       {
@@ -95,14 +98,34 @@ export const registerConversationListeners = (queryClient: QueryClient) => {
     });
   };
 
+  const handleMemberAdded = (member: ConversationMember) => {
+    queryClient.invalidateQueries({
+      queryKey: ["members", member.conversation_id],
+    });
+  };
+
+  const handleMemberRemoved = (member: ConversationMember) => {
+    queryClient.invalidateQueries({
+      queryKey: ["members", member.conversation_id],
+    });
+
+    if (member.user_id === currentUserId) {
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    }
+  };
+
   socket.on("conversation:created", handleCreated);
   socket.on("conversation:updated", handleUpdated);
   socket.on("conversation:deleted", handleDeleted);
   socket.on("conversation:has_read", handleHasRead);
+  socket.on("conversation:member_added", handleMemberAdded);
+  socket.on("conversation:member_removed", handleMemberRemoved);
 
   return () => {
     socket.off("conversation:created", handleCreated);
     socket.off("conversation:updated", handleUpdated);
     socket.off("conversation:deleted", handleDeleted);
+    socket.off("conversation:member_added", handleMemberAdded);
+    socket.off("conversation:member_removed", handleMemberRemoved);
   };
 };
