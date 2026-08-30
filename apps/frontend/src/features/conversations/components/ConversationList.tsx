@@ -2,8 +2,9 @@ import ConversationItem from "./ConversationItem";
 import { useConversations } from "../hooks/useConversations";
 import type { ConversationType } from "@relay/shared";
 import { useEffect, useRef } from "react";
-import { Loader2 } from "lucide-react";
 import { useDebounce } from "@/hooks/useDebounce";
+import ConversationListSkeleton from "./ConversationListSkeletion";
+import ConversationSkeletion from "./ConversationSkeletion";
 
 interface ConversationListProps {
   search: string;
@@ -16,18 +17,12 @@ const ConversationList = ({ search, type, unread }: ConversationListProps) => {
 
   const debouncedSearch = useDebounce(search, 500);
 
-  const {
-    data,
-    isPending,
-    isError,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = useConversations({
-    search: debouncedSearch,
-    type,
-    unread,
-  });
+  const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useConversations({
+      search: debouncedSearch,
+      type,
+      unread,
+    });
 
   useEffect(() => {
     const element = observerRef.current;
@@ -50,6 +45,10 @@ const ConversationList = ({ search, type, unread }: ConversationListProps) => {
     return () => observer.disconnect();
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
+  if (isPending) {
+    return <ConversationListSkeleton />;
+  }
+
   const conversations =
     data?.pages.flatMap((page) => page.data.conversations) ?? [];
 
@@ -66,11 +65,7 @@ const ConversationList = ({ search, type, unread }: ConversationListProps) => {
 
       <div ref={observerRef} className="h-1" />
 
-      {isFetchingNextPage && (
-        <div className="w-full flex items-center justify-center h-5 my-2">
-          <Loader2 className="size-5 animate-spin" />
-        </div>
-      )}
+      {isPending && <ConversationSkeletion />}
 
       {conversations.length > 0 && !hasNextPage && (
         <div className="w-full text-center h-5 my-2">
