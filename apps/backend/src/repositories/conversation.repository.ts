@@ -43,7 +43,7 @@ export const find = async (
       FROM conversations c
       ${CONVERSATION_JOINS}
       ${whereClause}
-      ORDER BY created_at DESC
+      ORDER BY updated_at DESC, created_at DESC
       ${limitClause}
       ${offsetClause}
     `,
@@ -167,7 +167,8 @@ export const update = async (
   const { rows } = await pool.query(
     `
     UPDATE conversations
-    ${setClause}
+    ${setClause},
+      updated_at = now()
     WHERE id = $${values.length}
     `,
     values,
