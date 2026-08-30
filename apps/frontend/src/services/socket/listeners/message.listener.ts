@@ -1,9 +1,6 @@
 import type { InfiniteData, QueryClient } from "@tanstack/react-query";
 
-import type {
-  ConversationWithRelations,
-  MessageWithRelations,
-} from "@relay/shared";
+import type { MessageWithRelations } from "@relay/shared";
 
 import { socket } from "../socket";
 
@@ -17,34 +14,18 @@ type MessagesPage = {
   };
 };
 
-type ConversationsPage = {
-  data: {
-    conversations: ConversationWithRelations[];
-    pagination: {
-      page: number;
-      total_pages: number;
-    };
-  };
-};
-
-export const registerMessageListener = (
-  queryClient: QueryClient,
-  currentUserId: string,
-) => {
+export const registerMessageListener = (queryClient: QueryClient) => {
   const handleNew = ({
     message,
-    unread_count,
   }: {
     message: MessageWithRelations;
     unread_count: number;
   }) => {
-    const isOwnMessage = message.sender.id === currentUserId;
-
-    // Message
+    // Add message to the currently cached conversation
     queryClient.setQueryData<InfiniteData<MessagesPage>>(
       ["messages", message.conversation_id],
       (old) => {
-        if (!old) return undefined;
+        if (!old) return old;
 
         return {
           ...old,
@@ -63,36 +44,9 @@ export const registerMessageListener = (
       },
     );
 
-    // Conversation
-    queryClient.setQueriesData<InfiniteData<ConversationsPage>>(
-      {
-        queryKey: ["conversations"],
-      },
-      (old) => {
-        if (!old) return old;
-
-        return {
-          ...old,
-          pages: old.pages.map((page) => ({
-            ...page,
-            data: {
-              ...page.data,
-              conversations: page.data.conversations.map((c) =>
-                c.id === message.conversation_id
-                  ? {
-                      ...c,
-                      unread_count: isOwnMessage
-                        ? c.unread_count
-                        : unread_count,
-                      last_message: message,
-                    }
-                  : c,
-              ),
-            },
-          })),
-        };
-      },
-    );
+    queryClient.invalidateQueries({
+      queryKey: ["conversations"],
+    });
   };
 
   const handleUpdated = (message: MessageWithRelations) => {
