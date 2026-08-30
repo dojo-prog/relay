@@ -6,6 +6,7 @@ import { socket } from "../socket";
 import { registerConversationListeners } from "../listeners/conversation.listeners";
 import { registerMessageListener } from "../listeners/message.listener";
 import { registerNotificationListener } from "../listeners/notification.listener";
+import { registerPresenceListener } from "../listeners/presence.listener";
 
 export const useSocketListeners = () => {
   const { user } = useAuthStore();
@@ -31,12 +32,15 @@ export const useSocketListeners = () => {
       navigate,
     );
 
+    const cleanupPresenceListener = registerPresenceListener(queryClient);
+
     return () => {
       cleanupConversationListeners();
       cleanupMessageListeners();
       cleanupNotificationListeners();
+      cleanupPresenceListener();
 
       socket.disconnect();
     };
-  }, [user, queryClient, navigate]);
+  }, [user, queryClient]);
 };

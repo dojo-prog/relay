@@ -69,7 +69,7 @@ const ConversationList = ({ search, type, unread }: ConversationListProps) => {
         </div>
       )}
 
-      {!hasNextPage && (
+      {conversations.length > 0 && !hasNextPage && (
         <div className="w-full text-center h-5 my-2">
           <span className="text-xs text-primary">End of result</span>
         </div>

@@ -11,10 +11,11 @@ import MessageBubble from "./MessageBubble";
 import useAuthStore from "@/stores/auth.store";
 import { useEffect } from "react";
 import { useMarkAsRead } from "../hooks/useMarkAsRead";
+import { usePresence } from "@/features/presence/hooks/usePresence";
+import { cn } from "@/lib/utils";
 
 const ChatContainer = () => {
   const { user } = useAuthStore();
-
   const { conversationId } = useParams();
 
   const { mutateAsync: markAsRead } = useMarkAsRead();
@@ -31,6 +32,8 @@ const ChatContainer = () => {
     isError: isMessagesError,
   } = useMessages(conversationId);
 
+  const { data: usersPresence } = usePresence();
+
   useEffect(() => {
     if (!conversationId) return;
     if (isConversationPending || isMessagesPending) return;
@@ -46,7 +49,10 @@ const ChatContainer = () => {
     markAsRead,
   ]);
 
-  if (!conversationId) return <ChatEmptyState />;
+  // Now conditional returns are okay
+  if (!conversationId) {
+    return <ChatEmptyState />;
+  }
 
   if (isConversationPending || isMessagesPending) {
     return (
@@ -74,6 +80,12 @@ const ChatContainer = () => {
     ? conversation.name
     : conversation.participant?.username;
 
+  const isOnline =
+    !isGroup && conversation.participant && usersPresence
+      ? usersPresence.includes(conversation.participant.id)
+      : false;
+
+  console.log(isOnline);
   return (
     <Card className="flex h-full w-full flex-col gap-0 overflow-hidden p-0">
       {/* Header */}
@@ -92,7 +104,15 @@ const ChatContainer = () => {
           <div>
             <h2 className="text-lg font-bold">{conversationName}</h2>
 
-            <span className="text-sm text-green-500">Online</span>
+            <span
+              className={cn(
+                "text-sm ",
+                isGroup && "hidden",
+                isOnline ? "text-green-500" : "text-secondary",
+              )}
+            >
+              {isOnline ? "Online" : "Offline"}
+            </span>
           </div>
         </div>
 

@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { usePresence } from "@/features/presence/hooks/usePresence";
 import { cn } from "@/lib/utils";
 import type { ConversationWithRelations } from "@relay/shared";
 import { Users2 } from "lucide-react";
@@ -16,8 +17,13 @@ const ConversationItem = ({
 }: ConversationItemProps) => {
   const navigate = useNavigate();
 
+  const { data: onlineUsers } = usePresence();
+
   const unreadCount = conversation.unread_count;
   const isGroup = conversation.type === "group";
+  const isOnline = conversation.participant
+    ? onlineUsers?.includes(conversation.participant.id)
+    : false;
 
   const conversationName = isGroup
     ? conversation.name
@@ -36,15 +42,21 @@ const ConversationItem = ({
         isActive && "bg-accent",
       )}
     >
-      <Avatar className={"size-10"}>
-        <AvatarFallback>
-          {conversation.type === "direct" ? (
-            conversation.participant?.username[0].toUpperCase()
-          ) : (
-            <Users2 className="size-5" />
-          )}
-        </AvatarFallback>
-      </Avatar>
+      <div className="relative">
+        <Avatar className={"size-10"}>
+          <AvatarFallback>
+            {conversation.type === "direct" ? (
+              conversation.participant?.username[0].toUpperCase()
+            ) : (
+              <Users2 className="size-5" />
+            )}
+          </AvatarFallback>
+        </Avatar>
+
+        {isOnline && (
+          <div className="absolute top-1 -right-0.5 size-2.5 bg-green-500 rounded-full" />
+        )}
+      </div>
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between">
