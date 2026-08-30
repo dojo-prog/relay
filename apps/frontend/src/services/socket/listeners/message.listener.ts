@@ -27,7 +27,10 @@ type ConversationsPage = {
   };
 };
 
-export const registerMessageListener = (queryClient: QueryClient) => {
+export const registerMessageListener = (
+  queryClient: QueryClient,
+  currentUserId: string,
+) => {
   const handleNew = ({
     message,
     unread_count,
@@ -35,6 +38,8 @@ export const registerMessageListener = (queryClient: QueryClient) => {
     message: MessageWithRelations;
     unread_count: number;
   }) => {
+    const isOwnMessage = message.sender.id === currentUserId;
+
     // Message
     queryClient.setQueryData<InfiniteData<MessagesPage>>(
       ["messages", message.conversation_id],
@@ -74,7 +79,13 @@ export const registerMessageListener = (queryClient: QueryClient) => {
               ...page.data,
               conversations: page.data.conversations.map((c) =>
                 c.id === message.conversation_id
-                  ? { ...c, unread_count, last_message: message }
+                  ? {
+                      ...c,
+                      unread_count: isOwnMessage
+                        ? c.unread_count
+                        : unread_count,
+                      last_message: message,
+                    }
                   : c,
               ),
             },
