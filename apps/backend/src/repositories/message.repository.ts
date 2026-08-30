@@ -88,7 +88,8 @@ export const add = async (
     const { rows: conversationRows } = await client.query(
       `
       UPDATE conversations
-      SET message_sequence = message_sequence + 1
+      SET message_sequence = message_sequence + 1,
+        updated_at = now()
       WHERE id = $1
       RETURNING message_sequence
       `,
@@ -96,6 +97,16 @@ export const add = async (
     );
 
     const sequence = Number(conversationRows[0].message_sequence);
+
+    await client.query(
+      `
+      UPDATE conversation_members 
+      SET last_read_sequence = $1
+      WHERE conversation_id = $2
+        AND user_id = $3
+      `,
+      [sequence, data.conversation_id, data.sender_id],
+    );
 
     // Add sequence to data for insert
     const finalData = {
