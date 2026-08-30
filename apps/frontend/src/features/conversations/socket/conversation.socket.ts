@@ -1,8 +1,10 @@
 import { socket } from "@/services/socket/socket";
 import type {
+  Conversation,
   ConversationWithRelations,
   CreateConversationInput,
   DeleteConversationInput,
+  MarkConversationAsReadInput,
   UpdateConversationInput,
 } from "@relay/shared";
 
@@ -89,6 +91,27 @@ export const remove = (input: DeleteConversationInput) => {
         }
 
         resolve(conversation);
+      },
+    );
+  });
+};
+
+export const read = (input: MarkConversationAsReadInput) => {
+  return new Promise((resolve, reject) => {
+    socket.emit(
+      "conversation:read",
+      input,
+      (response: Response<Conversation>) => {
+        if (!response.success) {
+          reject(
+            new Error(
+              response.message ??
+                "Failed to mark conversation messages as read",
+            ),
+          );
+        }
+
+        resolve("success");
       },
     );
   });

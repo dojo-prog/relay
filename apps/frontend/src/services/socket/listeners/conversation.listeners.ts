@@ -1,6 +1,9 @@
 import type { InfiniteData, QueryClient } from "@tanstack/react-query";
 import { socket } from "../socket";
-import type { ConversationWithRelations } from "@relay/shared";
+import type {
+  ConversationMember,
+  ConversationWithRelations,
+} from "@relay/shared";
 
 export interface ConversationsPage {
   data: {
@@ -86,9 +89,16 @@ export const registerConversationListeners = (queryClient: QueryClient) => {
     );
   };
 
+  const handleHasRead = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["conversations"],
+    });
+  };
+
   socket.on("conversation:created", handleCreated);
   socket.on("conversation:updated", handleUpdated);
   socket.on("conversation:deleted", handleDeleted);
+  socket.on("conversation:has_read", handleHasRead);
 
   return () => {
     socket.off("conversation:created", handleCreated);

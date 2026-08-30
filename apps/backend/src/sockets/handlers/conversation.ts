@@ -258,7 +258,7 @@ const registerConversationHandlers = (io: Server, socket: Socket) => {
       });
 
       if (updated !== undefined) {
-        socket.to(conversationRoom).emit("conversation:has_read", updated);
+        io.to(conversationRoom).emit("conversation:has_read", updated);
       }
     } catch (error) {
       handleError(error, ack);

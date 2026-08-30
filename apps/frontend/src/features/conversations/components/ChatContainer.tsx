@@ -9,11 +9,15 @@ import { useMessages } from "@/features/messages/hooks/useMessages";
 import ChatEmptyState from "./ChatEmptyState";
 import MessageBubble from "./MessageBubble";
 import useAuthStore from "@/stores/auth.store";
+import { useEffect } from "react";
+import { useMarkAsRead } from "../hooks/useMarkAsRead";
 
 const ChatContainer = () => {
   const { user } = useAuthStore();
 
   const { conversationId } = useParams();
+
+  const { mutateAsync: markAsRead } = useMarkAsRead();
 
   const {
     data: conversationData,
@@ -26,6 +30,21 @@ const ChatContainer = () => {
     isPending: isMessagesPending,
     isError: isMessagesError,
   } = useMessages(conversationId);
+
+  useEffect(() => {
+    if (!conversationId) return;
+    if (isConversationPending || isMessagesPending) return;
+    if (isConversationError || isMessagesError) return;
+
+    markAsRead(conversationId);
+  }, [
+    conversationId,
+    isConversationPending,
+    isMessagesPending,
+    isConversationError,
+    isMessagesError,
+    markAsRead,
+  ]);
 
   if (!conversationId) return <ChatEmptyState />;
 
