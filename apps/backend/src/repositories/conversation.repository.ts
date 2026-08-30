@@ -36,8 +36,6 @@ export const find = async (
       [...baseValues, userId],
     );
 
-  console.log(whereClause);
-
   const { rows } = await pool.query(
     `
       SELECT
@@ -95,8 +93,6 @@ export const findWithRelationsById = async (
   userId: string,
   conversationId: string,
 ): Promise<ConversationWithRelations> => {
-  console.log("called");
-
   const { rows } = await pool.query(
     `
     SELECT ${CONVERSATION_RELATIONS_PROJECTION}
@@ -107,8 +103,6 @@ export const findWithRelationsById = async (
     `,
     [userId, conversationId],
   );
-
-  console.log(rows[0]);
 
   return rows[0];
 };
