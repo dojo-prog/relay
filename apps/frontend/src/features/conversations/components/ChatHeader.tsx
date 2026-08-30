@@ -1,15 +1,18 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Info, Users2 } from "lucide-react";
+import { Users2 } from "lucide-react";
 import { usePresence } from "@/features/presence/hooks/usePresence";
 import { cn } from "@/lib/utils";
 import type { ConversationWithRelations } from "@relay/shared";
+import useAuthStore from "@/stores/auth.store";
+import EditConversationButton from "./EditConversationButton";
 
 type ChatHeaderProps = {
   conversation: ConversationWithRelations;
 };
 
 export const ChatHeader = ({ conversation }: ChatHeaderProps) => {
+  const { user } = useAuthStore();
+
   const { data: usersPresence } = usePresence();
 
   const isGroup = conversation.type === "group";
@@ -51,14 +54,10 @@ export const ChatHeader = ({ conversation }: ChatHeaderProps) => {
         </div>
       </div>
 
-      <Button
-        variant="outline"
-        size="icon"
-        className="size-10"
-        aria-label="Conversation information"
-      >
-        <Info className="size-6" />
-      </Button>
+      {user!.id === conversation.created_by.id &&
+        conversation.type === "group" && (
+          <EditConversationButton conversation={conversation} />
+        )}
     </header>
   );
 };
