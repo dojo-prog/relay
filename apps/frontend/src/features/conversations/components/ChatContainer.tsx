@@ -7,11 +7,13 @@ import { useParams } from "react-router-dom";
 import { useConversation } from "../hooks/useConversation";
 import { useMessages } from "@/features/messages/hooks/useMessages";
 import ChatEmptyState from "./ChatEmptyState";
+import MessageBubble from "./MessageBubble";
+import useAuthStore from "@/stores/auth.store";
 
 const ChatContainer = () => {
-  const { conversationId } = useParams();
+  const { user } = useAuthStore();
 
-  console.log(conversationId);
+  const { conversationId } = useParams();
 
   const {
     data: conversationData,
@@ -89,14 +91,18 @@ const ChatContainer = () => {
       <main className="min-h-0 flex-1 overflow-y-auto p-6">
         <div className="flex flex-col gap-3">
           {messages.map((message) => (
-            <div key={message.id}>{message.content}</div>
+            <MessageBubble
+              key={message.id}
+              currentUserId={user!.id}
+              message={message}
+            />
           ))}
         </div>
       </main>
 
       {/* Input */}
       <footer className="shrink-0 border-t p-4">
-        <MessageInput />
+        <MessageInput conversationId={conversationId} />
       </footer>
     </Card>
   );

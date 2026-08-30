@@ -1,20 +1,32 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Paperclip, Send } from "lucide-react";
+import { useSendMessage } from "@/features/messages/hooks/useSendMessage";
+import { Loader2, Paperclip, Send } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
-const MessageInput = () => {
+interface MessageInputProps {
+  conversationId: string;
+}
+
+const MessageInput = ({ conversationId }: MessageInputProps) => {
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const { mutateAsync, isPending } = useSendMessage();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const content = message.trim();
 
     if (!content) return;
 
-    // TODO: send message
-    console.log(content);
+    try {
+      await mutateAsync({ content: message, conversationId });
+    } catch (error) {
+      toast.error("Failed to send message");
+      console.error(error);
+    }
 
     setMessage("");
   };
@@ -53,10 +65,14 @@ const MessageInput = () => {
         type="submit"
         size="icon"
         className="shrink-0"
-        disabled={!message.trim()}
+        disabled={!message.trim() || isPending}
         aria-label="Send message"
       >
-        <Send className="size-5" />
+        {!isPending ? (
+          <Send className="size-5" />
+        ) : (
+          <Loader2 className="size-5 animate-spin" />
+        )}
       </Button>
     </form>
   );
