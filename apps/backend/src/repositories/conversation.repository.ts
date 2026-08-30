@@ -29,12 +29,11 @@ export const find = async (
   const { conditions: baseConditions, values: baseValues } =
     buildConversationSpecificFilters({ type, search, unread }, [], [userId]);
 
-  const { whereClause, orderByClause, limitClause, offsetClause, values } =
-    buildFilterQueries(
-      rest,
-      [...baseConditions, `cm.user_id = $${baseValues.length + 1}`],
-      [...baseValues, userId],
-    );
+  const { whereClause, limitClause, offsetClause, values } = buildFilterQueries(
+    rest,
+    [...baseConditions, `cm.user_id = $${baseValues.length + 1}`],
+    [...baseValues, userId],
+  );
 
   const { rows } = await pool.query(
     `
@@ -44,7 +43,7 @@ export const find = async (
       FROM conversations c
       ${CONVERSATION_JOINS}
       ${whereClause}
-      ${orderByClause}
+      ORDER BY created_at DESC
       ${limitClause}
       ${offsetClause}
     `,
