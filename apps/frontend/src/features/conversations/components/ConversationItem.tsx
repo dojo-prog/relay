@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { usePresence } from "@/features/presence/hooks/usePresence";
 import { cn } from "@/lib/utils";
+import useAuthStore from "@/stores/auth.store";
 import type { ConversationWithRelations } from "@relay/shared";
 import { Users2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +16,8 @@ const ConversationItem = ({
   conversation,
   isActive,
 }: ConversationItemProps) => {
+  const { user } = useAuthStore();
+
   const navigate = useNavigate();
 
   const { data: onlineUsers } = usePresence();
@@ -25,6 +28,17 @@ const ConversationItem = ({
     ? onlineUsers?.includes(conversation.participant.id)
     : false;
 
+  const { last_message } = conversation;
+
+  const lastSender = isGroup
+    ? last_message?.sender.id === user?.id
+      ? "you"
+      : last_message?.sender.username
+    : last_message?.sender.id === user?.id
+      ? "you"
+      : undefined;
+
+  const lastMessage = last_message?.content;
   const conversationName = isGroup
     ? conversation.name
     : conversation.participant?.username;
@@ -70,7 +84,8 @@ const ConversationItem = ({
               unreadCount > 0 && "text-bold",
             )}
           >
-            {conversation.last_message?.content}
+            {lastSender ? `${lastSender}: ` : ""}
+            {lastMessage ?? ""}
           </p>
         </div>
       </div>
