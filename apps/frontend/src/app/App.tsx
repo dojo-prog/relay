@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { socket } from "@/services/socket/socket";
 import { registerConversationListeners } from "@/services/socket/listeners/conversation.listeners";
 import { useQueryClient } from "@tanstack/react-query";
+import { registerMessageListener } from "@/services/socket/listeners/message.listener";
 
 const App = () => {
   const { user, checkAuth } = useAuthStore();
@@ -32,8 +33,12 @@ const App = () => {
     const cleanupConversationListeners =
       registerConversationListeners(queryClient);
 
+    const cleanupMessageListeners = registerMessageListener(queryClient);
+
     return () => {
       cleanupConversationListeners();
+      cleanupMessageListeners();
+
       socket.disconnect();
     };
   }, [user]);
