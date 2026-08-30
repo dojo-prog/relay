@@ -25,7 +25,7 @@ const ChatTabs = ({ search }: ChatTabsProps) => {
         <TabsTrigger value="groups">Groups</TabsTrigger>
       </TabsList>
 
-      <div className="overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
+      <div className="min-h-0 flex-1">
         <ConversationList search={search} type={type} unread={unread} />
       </div>
     </Tabs>
