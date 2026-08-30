@@ -116,7 +116,7 @@ export const add = async (
     values,
   );
 
-  const user_id = rows[0].id;
+  const user_id = rows[0].user_id;
 
   return await findWithRelationsById(data.conversation_id, user_id);
 };
@@ -124,7 +124,7 @@ export const add = async (
 export const remove = async (
   conversationId: string,
   userId: string,
-): Promise<ConversationMemberWithRelations> => {
+): Promise<void> => {
   await pool.query(
     `
     DELETE FROM conversation_members 
@@ -133,6 +133,4 @@ export const remove = async (
     `,
     [conversationId, userId],
   );
-
-  return await findWithRelationsById(conversationId, userId);
 };

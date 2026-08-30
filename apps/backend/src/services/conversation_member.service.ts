@@ -132,14 +132,16 @@ export const removeMember = async (
     );
   }
 
-  const existing = await conversationMemberRepository.findById(
+  const member = await conversationMemberRepository.findWithRelationsById(
     conversationId,
     memberId,
   );
 
-  if (!existing) {
+  if (!member) {
     throw new AppError(404, "Conversation member not found");
   }
 
-  return await conversationMemberRepository.remove(conversationId, memberId);
+  await conversationMemberRepository.remove(conversationId, memberId);
+
+  return member;
 };
