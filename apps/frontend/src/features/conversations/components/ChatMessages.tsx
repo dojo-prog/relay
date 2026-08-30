@@ -1,4 +1,5 @@
 import type { InfiniteData } from "@tanstack/react-query";
+
 import MessageBubble from "./MessageBubble";
 import { useChatScroll } from "../hooks/useChatScroll";
 
@@ -9,6 +10,7 @@ type ChatMessagesProps = {
   isFetchingNextMessages: boolean;
   currentUserId: string;
   conversationId: string;
+  isGroup: boolean;
 };
 
 export const ChatMessages = ({
@@ -18,6 +20,7 @@ export const ChatMessages = ({
   isFetchingNextMessages,
   currentUserId,
   conversationId,
+  isGroup,
 }: ChatMessagesProps) => {
   const messages = [...messagesData.pages]
     .reverse()
@@ -50,6 +53,7 @@ export const ChatMessages = ({
             key={message.id}
             currentUserId={currentUserId}
             message={message}
+            isGroup={isGroup}
           />
         ))}
 

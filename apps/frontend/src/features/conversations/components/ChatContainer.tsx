@@ -68,6 +68,8 @@ const ChatContainer = () => {
 
   const conversation = conversationData.data.conversation;
 
+  const isGroup = conversation.type === "group";
+
   return (
     <Card className="flex h-full w-full flex-col gap-0 overflow-hidden p-0">
       <ChatHeader conversation={conversation} />
@@ -79,6 +81,7 @@ const ChatContainer = () => {
         isFetchingNextMessages={isFetchingNextMessages}
         currentUserId={user!.id}
         conversationId={conversationId}
+        isGroup={isGroup}
       />
 
       <footer className="shrink-0 border-t p-4">
