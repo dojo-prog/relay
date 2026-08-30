@@ -67,7 +67,7 @@ export const findWithRelationsById = async (
     SELECT ${MESSAGE_RELATIONS_PROJECTION}
     FROM messages m
     ${MESSAGE_JOINS}
-    WHERE id = $1
+    WHERE m.id = $1
       AND conversation_id = $2
     `,
     [messageId, conversationId],
