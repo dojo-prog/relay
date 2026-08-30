@@ -7,6 +7,7 @@ import useAuthStore from "@/stores/auth.store";
 import EditConversationButton from "./EditConversationButton";
 import AddMemberButton from "./AddMemberButton";
 import RemoveMemberButton from "./RemoveMemberButton";
+import ViewMembersButton from "./ViewMembersButton";
 
 type ChatHeaderProps = {
   conversation: ConversationWithRelations;
@@ -56,14 +57,20 @@ export const ChatHeader = ({ conversation }: ChatHeaderProps) => {
         </div>
       </div>
 
-      {user!.id === conversation.created_by.id &&
-        conversation.type === "group" && (
-          <div className="flex items-center">
-            <AddMemberButton conversation={conversation} />
-            <RemoveMemberButton conversation={conversation} />
-            <EditConversationButton conversation={conversation} />
-          </div>
+      <div className="flex items-center">
+        {user!.id === conversation.created_by.id &&
+          conversation.type === "group" && (
+            <div className="flex items-center">
+              <AddMemberButton conversation={conversation} />
+              <RemoveMemberButton conversation={conversation} />
+              <EditConversationButton conversation={conversation} />
+            </div>
+          )}
+
+        {conversation.type === "group" && (
+          <ViewMembersButton conversation={conversation} />
         )}
+      </div>
     </header>
   );
 };
