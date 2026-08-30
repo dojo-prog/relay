@@ -9,19 +9,32 @@ import {
 } from "@/components/ui/dialog";
 import { useConversationMembers } from "../hooks/useConversationMembers";
 import type { ConversationWithRelations } from "@relay/shared";
-import { Users } from "lucide-react";
+import { LogOut, Users } from "lucide-react";
 import { useState } from "react";
+import { useLeaveConversation } from "../hooks/useLeaveConversation";
+import { useQueryClient } from "@tanstack/react-query";
+import useAuthStore from "@/stores/auth.store";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface ViewMembersButtonProps {
   conversation: ConversationWithRelations;
 }
 
 const ViewMembersButton = ({ conversation }: ViewMembersButtonProps) => {
+  const { user } = useAuthStore();
   const [open, setOpen] = useState(false);
+
+  const queryClient = useQueryClient();
+
+  const navigate = useNavigate();
 
   const { data, isPending } = useConversationMembers(
     conversation.type === "group" ? conversation.id : "",
   );
+
+  const { mutateAsync: leaveConversation, isPending: isLeaving } =
+    useLeaveConversation(conversation.id, queryClient);
 
   if (conversation.type !== "group") {
     return null;
@@ -30,6 +43,22 @@ const ViewMembersButton = ({ conversation }: ViewMembersButtonProps) => {
   const conversationMembers = data?.pages.flatMap(
     (page) => page.data.conversation_members,
   );
+
+  const isCreator = conversation.created_by.id === user?.id;
+
+  const handleLeave = async () => {
+    try {
+      await leaveConversation();
+
+      toast.success("Left conversation");
+
+      setOpen(false);
+
+      navigate("/");
+    } catch (error: any) {
+      toast.error(error.message ?? error);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -79,6 +108,21 @@ const ViewMembersButton = ({ conversation }: ViewMembersButtonProps) => {
             </div>
           )}
         </div>
+
+        {!isCreator && (
+          <div className="mt-4 border-t pt-4">
+            <Button
+              type="button"
+              variant="destructive"
+              className="h-12 w-full"
+              disabled={isLeaving}
+              onClick={handleLeave}
+            >
+              <LogOut className="size-4" />
+              {isLeaving ? "Leaving..." : "Leave conversation"}
+            </Button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

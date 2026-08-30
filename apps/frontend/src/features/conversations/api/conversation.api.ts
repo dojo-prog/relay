@@ -26,3 +26,11 @@ export const getConversationMembers = async (
 
   return data;
 };
+
+export const leaveConversation = async (conversationId: string) => {
+  const { data } = await axiosInstance.post(
+    `/v1/conversations/${conversationId}/leave`,
+  );
+
+  return data;
+};
