@@ -21,3 +21,11 @@ export const DeleteMessageInputSchema = z.object({
   conversationId: UUIDSchema,
   messageId: UUIDSchema,
 });
+
+// =======================================
+// TYPES
+// =======================================
+
+export type CreateMessageInput = z.input<typeof CreateMessageInputSchema>;
+export type UpdateMessageInput = z.input<typeof UpdateMessageInputSchema>;
+export type DeleteMessageInput = z.input<typeof DeleteMessageInputSchema>;
