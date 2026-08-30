@@ -1,7 +1,10 @@
 import express from "express";
 import { protectRoute } from "../middlewares/auth.middleware";
 import validate from "../middlewares/validation.middleware";
-import { ConversationParamsSchema } from "@relay/shared";
+import {
+  ConversationParamsSchema,
+  UpdateMessageBodySchema,
+} from "@relay/shared";
 import {
   deleteMessage,
   getConversationMessages,
@@ -22,7 +25,10 @@ router.get(
 
 router
   .route("/messages/:messageId")
-  .patch(validate({ params: MessageIdParamsSchema }), updateMessage)
+  .patch(
+    validate({ params: MessageIdParamsSchema, body: UpdateMessageBodySchema }),
+    updateMessage,
+  )
   .delete(
     validate({ params: MessageIdParamsSchema, body: DeleteMessageBodySchema }),
     deleteMessage,
