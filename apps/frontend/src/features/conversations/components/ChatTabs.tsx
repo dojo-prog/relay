@@ -14,14 +14,20 @@ const ChatTabs = ({ search }: ChatTabsProps) => {
   const unread = tab === "unread" ? true : undefined;
 
   return (
-    <Tabs value={tab} onValueChange={setTab} className="w-full">
+    <Tabs
+      value={tab}
+      onValueChange={setTab}
+      className="flex h-full min-h-0 w-full flex-col"
+    >
       <TabsList className="w-full">
         <TabsTrigger value="all">All</TabsTrigger>
         <TabsTrigger value="unread">Unread</TabsTrigger>
         <TabsTrigger value="groups">Groups</TabsTrigger>
       </TabsList>
 
-      <ConversationList search={search} type={type} unread={unread} />
+      <div className="overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
+        <ConversationList search={search} type={type} unread={unread} />
+      </div>
     </Tabs>
   );
 };
