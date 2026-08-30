@@ -33,7 +33,10 @@ const App = () => {
     const cleanupConversationListeners =
       registerConversationListeners(queryClient);
 
-    const cleanupMessageListeners = registerMessageListener(queryClient);
+    const cleanupMessageListeners = registerMessageListener(
+      queryClient,
+      user.id,
+    );
 
     return () => {
       cleanupConversationListeners();
