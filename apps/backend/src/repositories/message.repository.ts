@@ -21,23 +21,19 @@ export const find = async (
 
   const { rows } = await pool.query(
     `
-    SELECT * 
-    FROM (
-      SELECT ${MESSAGE_RELATIONS_PROJECTION},
-        COUNT(*) OVER()::INT AS total
-      FROM messages m
-      ${MESSAGE_JOINS}
-      ${whereClause}
-      ORDER BY created_at DESC
-      ${limitClause}
-      ${offsetClause}
-    ) AS latest_message 
-    ORDER BY created_at ASC
+    SELECT ${MESSAGE_RELATIONS_PROJECTION},
+      COUNT(*) OVER()::INT AS total
+    FROM messages m
+    ${MESSAGE_JOINS}
+    ${whereClause}
+    ORDER BY created_at DESC
+    ${limitClause}
+    ${offsetClause}
     `,
     values,
   );
 
-  const messages = rows.map(({ total, ...m }) => m);
+  const messages = rows.map(({ total, ...m }) => m).reverse();
 
   return {
     messages,
