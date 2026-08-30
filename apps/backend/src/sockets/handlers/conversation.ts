@@ -25,7 +25,7 @@ const registerConversationHandlers = (io: Server, socket: Socket) => {
   // =======================================
 
   socket.on("conversation:create", async (input, ack) => {
-    rateLimitAck(socket, "conversation:create", ack);
+    if (!rateLimitAck(socket, "conversation:create", ack)) return;
 
     try {
       const validated = validate(CreateConversationInputSchema, input);
@@ -79,7 +79,7 @@ const registerConversationHandlers = (io: Server, socket: Socket) => {
   // =======================================
 
   socket.on("conversation:update", async (input, ack) => {
-    rateLimitAck(socket, "conversation:update", ack);
+    if (!rateLimitAck(socket, "conversation:update", ack)) return;
 
     try {
       const validated = validate(UpdateConversationInputSchema, input);
@@ -114,7 +114,7 @@ const registerConversationHandlers = (io: Server, socket: Socket) => {
   // =======================================
 
   socket.on("conversation:delete", async (input, ack) => {
-    rateLimitAck(socket, "conversation:delete", ack);
+    if (!rateLimitAck(socket, "conversation:delete", ack)) return;
 
     try {
       const validated = validate(DeleteConversationInputSchema, input);
@@ -146,7 +146,7 @@ const registerConversationHandlers = (io: Server, socket: Socket) => {
   // =======================================
 
   socket.on("conversation:add_member", async (input, ack) => {
-    rateLimitAck(socket, "conversation:add_member", ack);
+    if (!rateLimitAck(socket, "conversation:add_member", ack)) return;
 
     try {
       const validated = validate(AddConversationMemberInputSchema, input);
@@ -192,7 +192,7 @@ const registerConversationHandlers = (io: Server, socket: Socket) => {
   // =======================================
 
   socket.on("conversation:remove_member", async (input, ack) => {
-    rateLimitAck(socket, "conversation:remove_member", ack);
+    if (!rateLimitAck(socket, "conversation:remove_member", ack)) return;
 
     try {
       const validated = validate(RemoveConversationMemberInputSchema, input);

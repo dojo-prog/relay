@@ -21,7 +21,7 @@ const registerMessageHandlers = (io: Server, socket: Socket) => {
   // =======================================
 
   socket.on("message:send", async (input, ack) => {
-    rateLimitAck(socket, "message:send", ack);
+    if (!rateLimitAck(socket, "message:send", ack)) return;
 
     try {
       const validated = validate(CreateMessageInputSchema, input);
@@ -71,7 +71,7 @@ const registerMessageHandlers = (io: Server, socket: Socket) => {
   // =======================================
 
   socket.on("message:update", async (input, ack) => {
-    rateLimitAck(socket, "message:update", ack);
+    if (!rateLimitAck(socket, "message:update", ack)) return;
 
     try {
       const validated = validate(UpdateMessageInputSchema, input);
@@ -106,7 +106,7 @@ const registerMessageHandlers = (io: Server, socket: Socket) => {
   // =======================================
 
   socket.on("message:delete", async (input, ack) => {
-    rateLimitAck(socket, "message:delete", ack);
+    if (!rateLimitAck(socket, "message:delete", ack)) return;
 
     try {
       const validated = validate(DeleteMessageInputSchema, input);
