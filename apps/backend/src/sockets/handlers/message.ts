@@ -57,7 +57,7 @@ const registerMessageHandlers = (io: Server, socket: Socket) => {
         data: { message: newMessage },
       });
 
-      socket.to(conversationRoom).emit("message:new", {
+      io.to(conversationRoom).emit("message:new", {
         message: newMessage,
         unread_count: unreadMessageCount,
       });
@@ -87,13 +87,15 @@ const registerMessageHandlers = (io: Server, socket: Socket) => {
         modified: { content },
       });
 
+      const { message: updatedMessage } = data;
+
       ack({
         success: true,
         message: "Message updated",
-        data,
+        data: { message: updatedMessage },
       });
 
-      io.to(conversationRoom).emit("message:updated", data);
+      io.to(conversationRoom).emit("message:updated", updatedMessage);
     } catch (error) {
       handleError(error, ack);
     }
