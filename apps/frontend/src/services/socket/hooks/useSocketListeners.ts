@@ -7,6 +7,7 @@ import { registerConversationListeners } from "../listeners/conversation.listene
 import { registerMessageListener } from "../listeners/message.listener";
 import { registerNotificationListener } from "../listeners/notification.listener";
 import { registerPresenceListener } from "../listeners/presence.listener";
+import { registerTypingListener } from "../listeners/typing.listener";
 
 export const useSocketListeners = () => {
   const { user } = useAuthStore();
@@ -36,11 +37,14 @@ export const useSocketListeners = () => {
 
     const cleanupPresenceListener = registerPresenceListener(queryClient);
 
+    const cleanupTypingListener = registerTypingListener(queryClient);
+
     return () => {
       cleanupConversationListeners();
       cleanupMessageListeners();
       cleanupNotificationListeners();
       cleanupPresenceListener();
+      cleanupTypingListener();
 
       socket.disconnect();
     };

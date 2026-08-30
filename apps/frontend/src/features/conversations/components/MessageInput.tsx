@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useSendMessage } from "@/features/messages/hooks/useSendMessage";
+import { useTypingStart } from "@/features/typing/hooks/useTypingStart";
+import { useTypingStop } from "@/features/typing/hooks/useTypingStop";
 import { Loader2, Paperclip, Send } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface MessageInputProps {
@@ -13,6 +15,17 @@ const MessageInput = ({ conversationId }: MessageInputProps) => {
   const [message, setMessage] = useState("");
 
   const { mutateAsync, isPending } = useSendMessage();
+
+  const { mutate: typingStart } = useTypingStart();
+  const { mutate: typingStop } = useTypingStop();
+
+  useEffect(() => {
+    if (message === "") {
+      typingStop(conversationId);
+    } else {
+      typingStart(conversationId);
+    }
+  }, [message]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
