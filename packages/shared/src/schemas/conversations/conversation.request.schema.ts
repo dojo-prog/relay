@@ -24,7 +24,7 @@ export const ConversationParamsSchema = z.object({
 export const ConversationSpecificQuerySchema = z.object({
   type: ConversationTypeSchema.optional(),
   search: SearchQuerySchema,
-  unread: z.boolean().optional(),
+  unread: z.coerce.boolean().optional(),
 });
 
 export const ConversationQuerySchema = z.object({
