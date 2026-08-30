@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "../pages/auth/LoginPage";
 import SignupPage from "../pages/auth/SignupPage";
 import ChatLayout from "../layouts/ChatLayout";
@@ -8,49 +8,16 @@ import ChatPage from "../pages/chat/ChatPage";
 import { Toaster } from "@/components/ui/sonner";
 import useAuthStore from "@/stores/auth.store";
 import { useEffect } from "react";
-import { socket } from "@/services/socket/socket";
-import { registerConversationListeners } from "@/services/socket/listeners/conversation.listeners";
-import { useQueryClient } from "@tanstack/react-query";
-import { registerMessageListener } from "@/services/socket/listeners/message.listener";
-import { registerNotificationListener } from "@/services/socket/listeners/notification.listener";
+import { useSocketListeners } from "@/services/socket/hooks/useSocketListeners";
 
 const App = () => {
   const { user, checkAuth } = useAuthStore();
-
-  const navigate = useNavigate();
-
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     checkAuth();
   }, []);
 
-  useEffect(() => {
-    if (!user) {
-      socket.disconnect();
-      return;
-    }
-
-    socket.connect();
-
-    const cleanupConversationListeners =
-      registerConversationListeners(queryClient);
-
-    const cleanupMessageListeners = registerMessageListener(queryClient);
-
-    const cleanupNotificationListeners = registerNotificationListener(
-      queryClient,
-      navigate,
-    );
-
-    return () => {
-      cleanupConversationListeners();
-      cleanupMessageListeners();
-      cleanupNotificationListeners();
-
-      socket.disconnect();
-    };
-  }, [user]);
+  useSocketListeners();
 
   return (
     <>
