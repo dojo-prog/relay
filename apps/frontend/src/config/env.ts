@@ -13,6 +13,9 @@ const env = {
   environment: getReqEnv("VITE_ENVIRONMENT"),
   apiUrl: getReqEnv("VITE_API_URL"),
   socketUrl: getReqEnv("VITE_SOCKET_URL"),
+
+  devApiUrl: getReqEnv("VITE_DEV_API_URL"),
+  devSocketUrl: getReqEnv("VITE_DEV_SOCKET_URL"),
 } as const;
 
 export { env };
