@@ -14,7 +14,7 @@ const pool = new Pool({
       : ENV.EXTERNAL_DATABASE_URL,
 
   ssl: {
-    rejectUnauthorized: ENV.NODE_ENV === "production" ? true : false,
+    rejectUnauthorized: false,
   },
 });
 
