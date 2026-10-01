@@ -1,7 +1,10 @@
 import { env } from "@/config/env";
 import { io } from "socket.io-client";
 
-export const socket = io(env.socketUrl, {
+const socketUrl =
+  env.environment === "prodcution" ? env.socketUrl : env.devSocketUrl;
+
+export const socket = io(socketUrl, {
   withCredentials: true,
   autoConnect: false,
 });

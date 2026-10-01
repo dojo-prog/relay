@@ -10,7 +10,7 @@ declare module "axios" {
 }
 
 const axiosInstance = axios.create({
-  baseURL: env.apiUrl,
+  baseURL: env.environment === "production" ? env.apiUrl : env.devApiUrl,
   headers: {
     "Content-Type": "application/json",
   },
