@@ -6,8 +6,19 @@ import ENV from "../config/env";
 
 const initializeSocket = (httpServer: HttpServer) => {
   // SocketIO Server Instance
+  const allowableOrigins = [ENV.CLIENT_URL, ENV.DEV_CLIENT_URL];
+
   const io = new Server(httpServer, {
-    cors: { origin: ENV.CLIENT_URL, credentials: true },
+    cors: {
+      origin: (origin, callback) => {
+        if (!origin || allowableOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
+      credentials: true,
+    },
   });
 
   // Socket Auth Middleware
