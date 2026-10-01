@@ -9,13 +9,22 @@ import conversationRouter from "./routers/conversation.routes";
 import conversationMemberRouter from "./routers/conversation_member.routes";
 import messageRouter from "./routers/message.routes";
 import notificationRouter from "./routers/notification.routes";
+import ENV from "./config/env";
 
 const app = express();
 
 // Cors
+const allowableOrigin = [ENV.CLIENT_URL, ENV.DEV_CLIENT_URL];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: (origin, callback) => {
+      if (!origin || allowableOrigin.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   }),
 );
