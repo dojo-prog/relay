@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import errorMiddleware from "./middlewares/error.middleware";
+import ENV from "./config/env";
 
 import authRouter from "./routers/auth.routes";
 import userRouter from "./routers/user.routes";
@@ -9,7 +10,7 @@ import conversationRouter from "./routers/conversation.routes";
 import conversationMemberRouter from "./routers/conversation_member.routes";
 import messageRouter from "./routers/message.routes";
 import notificationRouter from "./routers/notification.routes";
-import ENV from "./config/env";
+import healthRouter from "./routers/health.routes";
 
 const app = express();
 
@@ -40,6 +41,9 @@ app.use("/api/v1/conversations", conversationRouter);
 app.use("/api/v1/conversations", conversationMemberRouter);
 app.use("/api/v1/", messageRouter);
 app.use("/api/v1/notifications", notificationRouter);
+
+// Health Router
+app.use("/health", healthRouter);
 
 // Error Handler
 app.use(errorMiddleware);
